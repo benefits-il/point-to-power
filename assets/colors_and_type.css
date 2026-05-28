@@ -1,0 +1,252 @@
+/* ==========================================================================
+   Benefits Design System — colors_and_type.css
+   Direction 8: Illustrated-Storybook (האיור מוביל, הטיפוגרפיה משרתת)
+
+   The complete LOCKED token set. Copy this file into any Benefits artifact
+   (slides, web pages, quizzes, handouts) and you inherit the whole system.
+
+   Brand spine (never tinted, never substituted):
+     #047857  --green-anchor  Logo, primary CTA, Demo role
+     #10B981  --green-ui      Hover/focus/link, Practice role
+     #064E3B  --green-depth   Body text on light, dark canvas
+
+   Canvas: #FFFBEB buttercream — NOT white.
+   ========================================================================== */
+
+/* ---- Varela Round + JetBrains Mono — from Google Fonts -------------- */
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ---- Tabler Icons (THE ONLY icon family allowed in UI) ---------------- */
+@import url('https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css');
+
+/* ---- Rubik (display) — local font files from /fonts/ ----------------- */
+@font-face { font-family: 'Rubik'; font-style: normal; font-weight: 300; font-display: swap; src: url('fonts/Rubik-Light.ttf') format('truetype'); }
+@font-face { font-family: 'Rubik'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/Rubik-Regular.ttf') format('truetype'); }
+@font-face { font-family: 'Rubik'; font-style: normal; font-weight: 500; font-display: swap; src: url('fonts/Rubik-Medium.ttf') format('truetype'); }
+@font-face { font-family: 'Rubik'; font-style: normal; font-weight: 600; font-display: swap; src: url('fonts/Rubik-SemiBold.ttf') format('truetype'); }
+@font-face { font-family: 'Rubik'; font-style: normal; font-weight: 700; font-display: swap; src: url('fonts/Rubik-Bold.ttf') format('truetype'); }
+@font-face { font-family: 'Rubik'; font-style: normal; font-weight: 800; font-display: swap; src: url('fonts/Rubik-ExtraBold.ttf') format('truetype'); }
+@font-face { font-family: 'Rubik'; font-style: normal; font-weight: 900; font-display: swap; src: url('fonts/Rubik-Black.ttf') format('truetype'); }
+
+/* (legacy block below intentionally removed — see CSS order: @import must come first) */
+
+:root {
+  /* ===== Brand spine (locked, untouchable) ===== */
+  --green-anchor: #047857;
+  --green-ui:     #10B981;
+  --green-depth:  #064E3B;
+
+  /* ===== Supporting greens ===== */
+  --green-mint:   #6EE7B7;
+  --green-teal:   #2DD4BF;
+  --green-tint:   #A7F3D0;
+  --green-soft:   #D1FAE5;
+
+  /* ===== Storybook character cast — role-locked, never decorative ===== */
+  --story-sun:    #FCD34D;  /* Sunshine — highlighter swipe, pull-quote rule */
+  --story-cheek:  #FB7185;  /* Coral — Pro-tip, failure border */
+  --story-sky:    #A78BFA;  /* Lavender — Concept tint, calm hills */
+  --story-leaf:   #84CC16;  /* Leaf — sprout, growth metaphors */
+
+  /* ===== Canvas ===== */
+  --bg:           #FFFBEB;  /* Buttercream — default page background */
+  --bg-card:      #FFFFFF;
+  --bg-soft:      #FEF3C7;  /* Soft warm — pull-quote bg, table headers */
+  --bg-dark:      #064E3B;  /* Dark canvas (inverted slides) */
+
+  /* ===== Text ===== */
+  --text:         #064E3B;
+  --text-muted:   #4B5563;
+  --text-soft:    #6B7280;
+  --text-invert:  #FFFBEB;
+
+  /* ===== Borders ===== */
+  --border:       #FDE68A;  /* Default soft dashed border */
+  --border-soft:  #FEF3C7;
+  --border-strong:#064E3B;  /* The illustration ink line */
+
+  /* ===== Semantic ===== */
+  --success:      #047857;
+  --success-bg:   #D1FAE5;
+  --warn:         #F59E0B;
+  --warn-bg:      #FEF3C7;
+  --warn-text:    #92400E;
+  --error:        #9F1239;
+  --error-bg:     #FFE4E6;
+  --info:         #5B21B6;
+  --info-bg:      #EDE9FE;
+
+  /* ===== Fonts ===== */
+  --font-body:    'Varela Round', 'Rubik', system-ui, sans-serif;
+  --font-display: 'Rubik', 'Varela Round', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* ===== Type scale (LOCKED clamp values — oversized by default) ===== */
+  --fs-display:    clamp(3rem, 7vw, 5.5rem);       /* 48–88 / Rubik 900 / lh 1.05 */
+  --fs-h1:         clamp(2.25rem, 5vw, 3.75rem);   /* 36–60 / Rubik 800 / lh 1.15 */
+  --fs-h2:         clamp(1.75rem, 3.5vw, 2.5rem);  /* 28–40 / Rubik 700 / lh 1.30 */
+  --fs-h3:         clamp(1.375rem, 2.2vw, 1.75rem);/* 22–28 / Rubik 700 / lh 1.35 */
+  --fs-slide-body: clamp(1.5rem, 2.2vw, 2rem);     /* 24–32 / Varela 400 / lh 1.40 — SLIDE FLOOR */
+  --fs-body:       clamp(1.125rem, 1.4vw, 1.25rem);/* 18–20 / Varela 400 / lh 1.55 — WEB FLOOR */
+  --fs-handout:    clamp(1.0625rem, 1.2vw, 1.1875rem); /* 17–19 / Varela 400 / lh 1.75 — HANDOUT FLOOR */
+  --fs-caption:    clamp(0.9375rem, 1vw, 1rem);    /* 15–16 / Varela 400 — ABSOLUTE FLOOR */
+
+  /* ===== Spacing (base 8, half-step 4) ===== */
+  --space-1: 0.25rem;  /*  4px */
+  --space-2: 0.5rem;   /*  8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.5rem;   /* 24px */
+  --space-6: 2rem;     /* 32px */
+  --space-7: 3rem;     /* 48px */
+  --space-8: 4rem;     /* 64px */
+  --space-9: 6rem;     /* 96px */
+
+  /* ===== Radius (storybook-generous) ===== */
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-pill: 999px;
+
+  /* ===== Elevation (buttery, green-tinted — neutral gray is FORBIDDEN) ===== */
+  --shadow-sm: 0 2px 8px  rgba(4, 120, 87, 0.06);
+  --shadow-md: 0 8px 24px rgba(4, 120, 87, 0.08);
+  --shadow-lg: 0 18px 48px rgba(4, 120, 87, 0.10);
+
+  /* Block-shadow (signature stamped CTA look) */
+  --block-shadow-primary:        0 6px 0 0 #064E3B;
+  --block-shadow-primary-hover:  0 8px 0 0 #064E3B;
+  --block-shadow-primary-active: 0 2px 0 0 #064E3B;
+  --block-shadow-secondary:      0 4px 0 0 #047857;
+}
+
+/* ==========================================================================
+   BASE — every Benefits document opens here
+   ========================================================================== */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+html { direction: rtl; }  /* RTL by default. Hebrew is the primary language. */
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ==========================================================================
+   SEMANTIC TYPE — apply these classes directly
+   ========================================================================== */
+.t-display, h1.t-display {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: var(--fs-display);
+  line-height: 1.05;
+  color: var(--green-depth);
+  letter-spacing: -0.01em;
+}
+
+.t-h1, h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--fs-h1);
+  line-height: 1.15;
+  color: var(--green-depth);
+}
+
+.t-h2, h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h2);
+  line-height: 1.30;
+  color: var(--green-depth);
+}
+
+.t-h3, h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h3);
+  line-height: 1.35;
+  color: var(--green-anchor);
+}
+
+.t-slide-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-slide-body);
+  line-height: 1.40;
+  color: var(--text);
+}
+
+.t-body, p {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.t-handout {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-handout);
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.t-caption, small {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-caption);
+  line-height: 1.55;
+  color: var(--text-soft);
+}
+
+.t-code, code, pre {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* The "big number" pattern — evidence-as-type on title slides */
+.big-number {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 14vw, 11rem);
+  font-weight: 900;
+  color: var(--green-anchor);
+  line-height: 1;
+}
+
+/* The sunshine highlighter swipe — one keyword per headline */
+.t-highlight {
+  background-image: linear-gradient(180deg, transparent 65%, rgba(252, 211, 77, 0.55) 65%);
+  padding: 0 0.05em;
+}
+
+/* Focus ring — every interactive element */
+:focus-visible {
+  outline: 3px solid var(--green-ui);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Selection */
+::selection {
+  background: var(--green-soft);
+  color: var(--green-depth);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

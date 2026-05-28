@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="Hand-with-pen — Practice">
+  <title>Hand-with-pen — Practice</title>
+<path d="M20 70c0-6 4-10 10-10h28v34H30c-6 0-10-4-10-10V70z" fill="#FCD34D" stroke="#064E3B" stroke-width="3" stroke-linejoin="round"></path>
+      <path d="M58 60c8-4 18-4 26 0v34c-8-4-18-4-26 0V60z" fill="#10B981" stroke="#064E3B" stroke-width="3" stroke-linejoin="round"></path>
+      <path d="M70 28l24 24-10 10-24-24 10-10z" fill="#FB7185" stroke="#064E3B" stroke-width="3" stroke-linejoin="round"></path>
+      <path d="M94 52l8 8-4 4-8-8 4-4z" fill="#064E3B"></path>
+      <path d="M60 60l8 8" stroke="#064E3B" stroke-width="3" fill="none" stroke-linecap="round"></path>
+</svg>

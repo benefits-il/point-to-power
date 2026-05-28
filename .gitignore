@@ -1,0 +1,7 @@
+# Generated Claude.ai Project knowledge files (regenerate via scripts/build-claude-ai-project.sh)
+claude-ai-project/point/knowledge-files/
+claude-ai-project/power/knowledge-files/
+
+# OS noise
+.DS_Store
+Thumbs.db

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="Caution-flag — Warning">
+  <title>Caution-flag — Warning</title>
+<path d="M28 14v94" stroke="#064E3B" stroke-width="4" stroke-linecap="round" fill="none"></path>
+      <path d="M28 22c12-6 24 6 36 0s24 6 36 0v34c-12 6-24-6-36 0s-24-6-36 0V22z" fill="#F59E0B" stroke="#064E3B" stroke-width="3" stroke-linejoin="round"></path>
+      <path d="M60 30v18M60 32a3 3 0 010 14M60 40a3 3 0 000 6" stroke="#064E3B" stroke-width="2.5" fill="none" stroke-linecap="round"></path>
+</svg>

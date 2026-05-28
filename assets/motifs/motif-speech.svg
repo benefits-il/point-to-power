@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="Speech-bubble — Demo">
+  <title>Speech-bubble — Demo</title>
+<path d="M20 28h70c6 0 10 4 10 10v38c0 6-4 10-10 10H50l-20 18v-18h-10c-6 0-10-4-10-10V38c0-6 4-10 10-10z" fill="#10B981" stroke="#064E3B" stroke-width="3" stroke-linejoin="round"></path>
+      <path d="M40 56l8 8 24-24" stroke="#FFFBEB" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
