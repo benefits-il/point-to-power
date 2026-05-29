@@ -136,8 +136,8 @@ Rejection rules block consumption. The warning rule does not block , it surfaces
 
 ### W1. `forbidden-glyph`
 
-- **trigger:** Emoji or em-dash (`,`, U+2014) found in any field value (meta value, slide field value, recommendation field value, notes-to-power text).
-- **predicate:** `any(is_emoji(c) or c == "," for c in collect_all_field_values(ast))`
+- **trigger:** Emoji or em-dash (U+2014) found in any field value (meta value, slide field value, recommendation field value, notes-to-power text).
+- **predicate:** `any(is_emoji(c) or ord(c) == 0x2014 for c in collect_all_field_values(ast))`
 - **hebrew_message:** `נמצאו תווים אסורים בשדה {location}: {chars}. POWER ימשיך לבנות, אך מומלץ לנקות אותם בקובץ המקור.`
 - **substitutions:** `{location}` = canonical path like `meta.audience` or `slide_3.content`, `{chars}` = the offending characters as a comma-separated list (literal display).
 - **behavior:** Does NOT block consumption. Surfaces alongside the build output.
