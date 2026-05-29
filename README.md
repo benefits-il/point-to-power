@@ -49,31 +49,35 @@ The manifest at `.claude-plugin/plugin.json` is shared between the two environme
 ## Layout
 
 ```
-point-to-power/
-  .claude-plugin/plugin.json
-  agents/
-    point.md
-    power.md
-  skills/
-    point-elicit-content-from-user/
-    point-structure-content-to-slides/
-    point-recommend-and-prompt-notebooklm/
-    point-produce-handoff-md/
-    power-parse-point-handoff/
-    power-validate-handoff-against-contract/
-    power-detect-target-html-or-ppt/
-    power-select-style/
-    power-write-per-slide-layout/
-    power-generate-visual-prompts/
-    power-generate-ppt-prompt/
-    power-generate-html-prompt/
-  commands/
-    point.md
-    power.md
-  references/         (R1, R2, R3, R4 knowledge base + handoff-contract + example-handoff)
-  shared/             (validation-rules.md, filesystem-conventions.md)
+point-to-power/                 (repo root = plugin marketplace)
+  .claude-plugin/marketplace.json
+  point-to-power/               (the plugin — installed as point-to-power@benefits-plugins)
+    .claude-plugin/plugin.json
+    agents/
+      point.md
+      power.md
+    skills/
+      point-elicit-content-from-user/
+      point-structure-content-to-slides/
+      point-recommend-and-prompt-notebooklm/
+      point-produce-handoff-md/
+      power-parse-point-handoff/
+      power-validate-handoff-against-contract/
+      power-detect-target-html-or-ppt/
+      power-select-style/
+      power-write-per-slide-layout/
+      power-generate-visual-prompts/
+      power-generate-ppt-prompt/
+      power-generate-html-prompt/
+    commands/
+      point.md
+      power.md
+    references/       (R1, R2, R3, R4 knowledge base + handoff-contract + example-handoff)
+    shared/           (validation-rules.md, filesystem-conventions.md)
   assets/             (landing page assets)
-  landing.html
+  index.html          (GitHub Pages landing)
+  claude-ai-project/  (generated Claude.ai Project export)
+  scripts/
   README.md
 ```
 

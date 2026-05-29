@@ -9,12 +9,13 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+PLUGIN_ROOT="$REPO_ROOT/point-to-power"
 
 REFS="$PLUGIN_ROOT/references"
 SHARED="$PLUGIN_ROOT/shared"
-POINT_OUT="$PLUGIN_ROOT/claude-ai-project/point/knowledge-files"
-POWER_OUT="$PLUGIN_ROOT/claude-ai-project/power/knowledge-files"
+POINT_OUT="$REPO_ROOT/claude-ai-project/point/knowledge-files"
+POWER_OUT="$REPO_ROOT/claude-ai-project/power/knowledge-files"
 
 rm -rf "$POINT_OUT" "$POWER_OUT"
 mkdir -p "$POINT_OUT" "$POWER_OUT"

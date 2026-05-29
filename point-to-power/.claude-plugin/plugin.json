@@ -5,8 +5,5 @@
   "author": {
     "name": "Benefits by Ben Akiva"
   },
-  "keywords": ["presentations", "slides", "agents", "hebrew", "claude-code", "cowork"],
-  "agents": "./agents/",
-  "skills": "./skills/",
-  "commands": "./commands/"
+  "keywords": ["presentations", "slides", "agents", "hebrew", "claude-code", "cowork"]
 }
