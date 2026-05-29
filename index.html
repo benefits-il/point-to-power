@@ -140,6 +140,116 @@
   .foot__links a:hover{ color:var(--story-sun); }
   .foot__bottom{ max-width:1160px; margin:28px auto 0; padding-top:20px; border-top:1px solid rgba(255,255,255,.15); font-size:13px; color:rgba(255,255,255,.55); text-align:center; }
 
+  /* RESPONSIVE / MOBILE — the nav had no mobile treatment and overflowed on phones */
+  @media (max-width: 1100px) {
+    .nav__links { gap: 2px; }
+    .nav__link { padding: 6px 8px; font-size: 13px; }
+    .btn { padding: 10px 16px; font-size: 13px; }
+  }
+  @media (max-width:768px){
+    .nav__inner{ padding:12px 16px; gap:10px; }
+    .nav__link{ display:none; }            /* hide text links on phones */
+    .btn--ghost{ display:none; }           /* hide GitHub ghost btn, keep the primary CTA */
+    .nav__links{ gap:8px; }
+    .btn{ padding:10px 16px; font-size:14px; }
+    section{ padding:48px 16px !important; }
+    .section__head{ margin-bottom:32px !important; }
+    .section__title { font-size: 28px !important; }
+    .section__deck { font-size: 15px !important; }
+    .hero__cta-row .btn{ flex:1 1 auto; justify-content:center; }
+  }
+  @media (max-width:480px){
+    .nav__inner{ gap:8px; }
+    .logo{ font-size:17px; }
+    .logo__mark{ width:34px; height:34px; }
+    .hero__cta-row{ flex-direction:column; align-items:stretch; }
+    .hero__cta-row .btn{ width:100%; }
+    .btn--lg{ padding:14px 22px; font-size:15px; }
+    section{ padding:48px 16px; }
+  }
+
+  /* DUO ARROW MOBILE FIX */
+  @media (max-width: 880px) {
+    .duo__arrow { transform: rotate(270deg) !important; justify-self: center; margin: 12px 0 !important; }
+  }
+
+  /* WALKTHROUGH TIMELINE */
+  .timeline { display: flex; flex-direction: column; gap: 32px; max-width: 900px; margin: 0 auto; position: relative; }
+  .timeline::before { content: ''; position: absolute; top: 0; bottom: 0; inset-inline-start: 24px; width: 3px; background: var(--ink); border-radius: 99px; }
+  .timeline-item { display: grid; grid-template-columns: 48px 1fr; gap: 24px; position: relative; }
+  .timeline-item__badge { width: 48px; height: 48px; border: 2.5px solid var(--ink); border-radius: 50%; display: grid; place-items: center; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 16px; background: var(--story-sun); box-shadow: 3px 3px 0 0 var(--ink); z-index: 1; }
+  .timeline-item:nth-child(even) .timeline-item__badge { background: var(--story-sky); color: #fff; }
+  .timeline-item:nth-child(3n) .timeline-item__badge { background: var(--green-mint); }
+  .timeline-item__content { background: var(--paper); border: 2.5px solid var(--ink); border-radius: 20px; padding: 24px 28px; box-shadow: 6px 6px 0 0 var(--ink); position: relative; transition: transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s; }
+  .timeline-item__content:hover { transform: translate(2px, -2px); box-shadow: 8px 8px 0 0 var(--ink); }
+  .timeline-item__title { font-family: 'Rubik'; font-size: 20px; font-weight: 800; margin: 0 0 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .timeline-item__tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 2px 8px; border: 1.5px solid var(--ink); border-radius: 999px; background: var(--green-soft); color: var(--green-depth); font-weight: 600; direction: ltr; }
+  .timeline-item__body { font-size: 15px; color: var(--text-muted); margin: 0 0 12px; }
+  .timeline-item__details { margin: 0; padding: 0 18px 0 0; list-style-type: none; display: grid; gap: 8px; }
+  .timeline-item__details li { position: relative; font-size: 14px; color: var(--text); }
+  .timeline-item__details li::before { content: '←'; position: absolute; right: -18px; top: 0; color: var(--green-anchor); font-weight: bold; }
+
+  @media (max-width: 600px) {
+    .timeline::before { display: none; }
+    .timeline-item { grid-template-columns: 1fr; gap: 12px; }
+    .timeline-item__badge { width: 36px; height: 36px; font-size: 14px; box-shadow: 2px 2px 0 0 var(--ink); }
+    .timeline-item__content { padding: 16px 20px; }
+    .timeline-item__title { font-size: 18px; gap: 6px; }
+    .timeline-item__body { font-size: 14px; margin-bottom: 8px; }
+    .timeline-item__details li { font-size: 13px; }
+  }
+
+  /* MOCKS GRID & CARDS */
+  .mocks-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 36px; margin-top: 20px; }
+  @media (max-width: 880px) { .mocks-grid { grid-template-columns: 1fr; gap: 24px; } }
+  .mock-card { display: flex; flex-direction: column; gap: 14px; }
+  .mock-card .mock { transform: none; transition: transform .2s; margin-bottom: 4px; }
+  .mock-card:hover .mock { transform: translateY(-4px) rotate(1deg); }
+  .mock-caption { font-size: 14px; color: var(--text-muted); text-align: center; font-weight: 500; line-height: 1.5; padding: 0 12px; }
+
+  /* MOCK INTERNAL CONTENT UI */
+  .mock { max-width: 100%; overflow: hidden; }
+  .mock__chat-container { display: flex; flex-direction: column; gap: 12px; }
+  .mock__chat-bubble { padding: 10px 14px; border: 2.5px solid var(--ink); border-radius: 16px; font-size: 13px; max-width: 85%; line-height: 1.4; box-shadow: 2px 2px 0 0 var(--ink); }
+  .mock__chat-bubble--agent { background: var(--green-soft); align-self: flex-start; border-bottom-right-radius: 4px; }
+  .mock__chat-bubble--user { background: var(--soft); align-self: flex-end; border-bottom-left-radius: 4px; }
+
+  .mock__code { font-family: 'JetBrains Mono', monospace; font-size: 11px; background: #1e1e24; color: #a9b2c3; padding: 12px 16px; border: 2.5px solid var(--ink); border-radius: 12px; direction: ltr; text-align: left; overflow-x: auto; box-shadow: 3px 3px 0 0 var(--ink); line-height: 1.4; white-space: pre-wrap; word-break: break-all; max-width: 100%; }
+  .mock__code .keyword { color: #f07178; font-weight: 600; }
+  .mock__code .string { color: #c3e88d; }
+  .mock__code .comment { color: #546e7a; font-style: italic; }
+  .mock__code .heading { color: #82aaff; font-weight: 600; }
+
+  .mock__style-option { display: flex; align-items: center; gap: 10px; padding: 10px; border: 2px solid var(--ink); border-radius: 10px; background: var(--paper); font-size: 13px; }
+  .mock__style-option--active { background: var(--story-sun); box-shadow: 2px 2px 0 0 var(--ink); }
+  .mock__style-badge { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; padding: 2px 6px; border: 1.5px solid var(--ink); border-radius: 4px; background: var(--ink); color: #fff; text-transform: uppercase; }
+
+  /* VALUE GRID */
+  .value-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  @media (max-width: 880px) { .value-grid { grid-template-columns: 1fr; } }
+  .value-card { position: relative; background: var(--paper); border: 2.5px solid var(--ink); border-radius: 24px; padding: 28px 24px; box-shadow: 6px 6px 0 0 var(--ink); transition: transform .2s, box-shadow .2s; overflow: hidden; }
+  .value-card:hover { transform: translate(3px, -3px); box-shadow: 9px 9px 0 0 var(--ink); }
+  .value-card__icon { width: 52px; height: 52px; border: 2.5px solid var(--ink); border-radius: 14px; display: grid; place-items: center; font-size: 24px; box-shadow: 2.5px 2.5px 0 0 var(--ink); margin-bottom: 16px; background: var(--story-sky); color: #fff; }
+  .value-card:nth-child(2) .value-card__icon { background: var(--story-sun); color: var(--ink); }
+  .value-card:nth-child(3) .value-card__icon { background: var(--green-mint); color: var(--ink); }
+  .value-card:nth-child(4) .value-card__icon { background: var(--story-cheek); color: #fff; }
+  .value-card h3 { font-family: 'Rubik'; font-size: 20px; font-weight: 800; margin: 0 0 10px; color: var(--ink); }
+  .value-card p { font-size: 14.5px; color: var(--text-muted); margin: 0; line-height: 1.55; }
+
+  /* REQUIREMENTS BOX */
+  .req-box { background: var(--soft); border: 2.5px dashed var(--ink); border-radius: 24px; padding: 32px; box-shadow: 6px 6px 0 0 var(--ink); display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 768px) {
+    .req-box { grid-template-columns: 1fr; gap: 16px; padding: 20px; justify-items: center; text-align: right; }
+    .req-item { text-align: right; }
+  }
+  .req-box__stamp { width: 72px; height: 72px; border: 2.5px solid var(--ink); border-radius: 18px; display: grid; place-items: center; font-size: 32px; background: var(--story-sun); box-shadow: 3px 3px 0 0 var(--ink); transform: rotate(-4deg); }
+  .req-box__title { font-family: 'Rubik'; font-size: 22px; font-weight: 800; margin: 0 0 14px; }
+  .req-list { margin: 0; padding: 0; list-style-type: none; display: grid; gap: 12px; }
+  .req-item { display: flex; align-items: start; gap: 12px; text-align: right; }
+  .req-item i { font-size: 18px; color: var(--green-anchor); margin-top: 3px; flex-shrink: 0; }
+  .req-item__content { font-size: 15px; color: var(--text); line-height: 1.5; }
+  .req-item__content strong { color: var(--green-depth); background: rgba(16, 185, 129, 0.15); padding: 1px 6px; border-radius: 4px; }
+
   .stagger>*{ opacity:0; transform:translateY(20px); transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1); }
   .stagger.in>*{ opacity:1; transform:translateY(0); }
   .stagger.in>*:nth-child(2){ transition-delay:.1s; } .stagger.in>*:nth-child(3){ transition-delay:.2s; }
@@ -153,6 +263,10 @@
     <nav class="nav__links" aria-label="ניווט">
       <a class="nav__link" href="#duo">הסוכנים</a>
       <a class="nav__link" href="#how">איך זה עובד</a>
+      <a class="nav__link" href="#walkthrough">מדריך</a>
+      <a class="nav__link" href="#mocks">תצוגה</a>
+      <a class="nav__link" href="#value">ערך</a>
+      <a class="nav__link" href="#requirements">דרישות</a>
       <a class="nav__link" href="#install">התקנה</a>
       <a class="btn btn--ghost" href="https://github.com/benefits-il/point-to-power"><i class="ti ti-brand-github"></i> GitHub</a>
       <a class="btn btn--primary" href="https://github.com/benefits-il/point-to-power"><i class="ti ti-download"></i> התקן</a>
@@ -199,7 +313,7 @@
       <h3>Point</h3>
       <p>מאפיין את התוכן בשאלות, מחיל דיסציפלינה מוכחת (טיפוגרפיה, צפיפות, מבנה סיפורי), ומפיק handoff מובנה ב-Markdown. ממקד אותך במסר לפני שנוגעים בעיצוב.</p>
     </article>
-    <div class="duo__arrow" aria-hidden="true">→</div>
+    <div class="duo__arrow" aria-hidden="true">←</div>
     <article class="agent agent--power">
       <svg class="agent__deco" viewBox="0 0 140 140" aria-hidden="true"><g transform="translate(70 70)"><path d="M0,-60 L14,-18 L58,-18 L24,8 L36,52 L0,26 L-36,52 L-24,8 L-58,-18 L-14,-18 Z" fill="#FCD34D" stroke="#064E3B" stroke-width="3" stroke-linejoin="round"/></g></svg>
       <div class="agent__icon"><i class="ti ti-presentation"></i></div>
@@ -220,6 +334,226 @@
     <div class="how-step"><span class="how-step__num">02</span><h4 class="how-step__title">handoff.md</h4><p class="how-step__body">Point מייצר מסמך מובנה עם כל התוכן והמבנה — מוכן ל-POWER.</p></div>
     <div class="how-step"><span class="how-step__num">03</span><h4 class="how-step__title">מפעילים <span class="cmd">/power</span></h4><p class="how-step__body">POWER מציע סגנון ראשי, חלופי ו-wildcard מתוך 15+ אופציות.</p></div>
     <div class="how-step"><span class="how-step__num">04</span><h4 class="how-step__title">פרומפט סופי</h4><p class="how-step__body">ליעד שבחרת — PowerPoint או HTML. מאיטרציה: "תוסיף ויזואל", "dark mode".</p></div>
+  </div>
+</section>
+
+<section id="walkthrough" aria-labelledby="walkthrough-title">
+  <div class="section__head">
+    <span class="kicker">WALKTHROUGH</span>
+    <h2 id="walkthrough-title" class="section__title">איך זה עובד — <span class="ul">צעד אחר צעד</span></h2>
+    <p class="section__deck">בלי סיבוכים: כך נראית העבודה המשותפת והקלילה של Point ו-POWER.</p>
+  </div>
+  
+  <div class="timeline stagger">
+    <div class="timeline-item">
+      <div class="timeline-item__badge">01</div>
+      <div class="timeline-item__content">
+        <h4 class="timeline-item__title">שלב 1: שיחה קצרה לגיבוש המסר <span class="timeline-item__tag">/point</span></h4>
+        <p class="timeline-item__body">פשוט מספרים ל-Point על מה המצגת שלכם. הוא ישאל אתכם כמה שאלות קלילות וממוקדות כדי להבין בדיוק מה אתם רוצים להגיד.</p>
+        <ul class="timeline-item__details">
+          <li>הוא מבין בעצמו מי הקהל, מה אורך המצגת, מה השפה והאם תרצו אותה כ-PowerPoint או כקובץ HTML.</li>
+          <li>הוא שומר אתכם ממוקדים בתוכן ובמסרים עצמם – בלי להתפזר לענייני עיצוב בשלב הזה.</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="timeline-item">
+      <div class="timeline-item__badge">02</div>
+      <div class="timeline-item__content">
+        <h4 class="timeline-item__title">שלב 2: יצירת מתווה שקפים מסודר <span class="timeline-item__tag">handoff.md</span></h4>
+        <p class="timeline-item__body">Point מארגן את כל הרעיונות שלכם למבנה שקפים הגיוני ומשכנע, ומסדר אותו בקובץ Markdown מיוחד.</p>
+        <ul class="timeline-item__details">
+          <li>הוא דואג לזרימה סיפורית נכונה, מוודא שיש מסר אחד ברור בכל שקופית וכותב עבורכם פתקי דובר מפורטים.</li>
+          <li>הקובץ נשמר אוטומטית בתיקיית <code class="mono">build/handoff-runtime/</code> ומוכן מיד לשלב הבא.</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="timeline-item">
+      <div class="timeline-item__badge">03</div>
+      <div class="timeline-item__content">
+        <h4 class="timeline-item__title">שלב 3: הפעלת POWER ובחירת סגנון עיצוב <span class="timeline-item__tag">/power</span></h4>
+        <p class="timeline-item__body">מפעילים את POWER. הוא קורא את קובץ התוכן ומציע לכם סגנונות עיצוב מדהימים שמתאימים בדיוק למסר שלכם.</p>
+        <ul class="timeline-item__details">
+          <li>תקבלו 3 הצעות סגנון מדליקות (סגנון מוביל, סגנון חלופי וסגנון מיוחד להעז) מתוך קטלוג של 15+ עיצובים שונים (כמו Quiet Luxury, Editorial, Brutalist ועוד).</li>
+          <li>הוא בודק שהצבעים קריאים ונגישים, ושהכול מיושר מושלם לימין (RTL) עבור עברית.</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="timeline-item">
+      <div class="timeline-item__badge">04</div>
+      <div class="timeline-item__content">
+        <h4 class="timeline-item__title">שלב 4: הפקת הפרומפט הסופי למצגת <span class="timeline-item__tag">OUTPUT</span></h4>
+        <p class="timeline-item__body">אחרי שבוחרים סגנון, POWER יוצר עבורכם את הפרומפט המדויק ליצירת המצגת בפועל.</p>
+        <ul class="timeline-item__details">
+          <li><strong>Block A (הפרומפט הראשי):</strong> להעתקה והדבקה פשוטה בתוסף Claude-in-PowerPoint (או ב-Claude.ai לקובץ HTML deck שלם).</li>
+          <li><strong>Block B (פרומפטי תמונות):</strong> פרומפטים מוכנים ליצירת תמונות שאפשר להפעיל ב-Gemini או Midjourney ולשלב בשקפים.</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="timeline-item">
+      <div class="timeline-item__badge">05</div>
+      <div class="timeline-item__content">
+        <h4 class="timeline-item__title">שלב 5: תיקונים ושיפורים ברגע <span class="timeline-item__tag">ITERATION</span></h4>
+        <p class="timeline-item__body">רוצים לשנות משהו בעיצוב או להחליף תמונה? אין שום בעיה!</p>
+        <ul class="timeline-item__details">
+          <li>פשוט אומרים ל-POWER: "תעביר את הכותרת למעלה", "תחליף לצבעים חמים" או "תוסיף עוד רווח לבן".</li>
+          <li>הוא זוכר את כל מה שעשינו ומעדכן רק את מה שביקשתם, בלי להתחיל הכל מהתחלה.</li>
+          <li>אם תרצו לשנות את הטקסט עצמו, הוא יחזיר אתכם ל-Point תוך שמירה על העיצוב שכבר בחרתם.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mocks" class="how" aria-labelledby="mocks-title" style="border-top:2.5px solid var(--ink); border-bottom:2.5px solid var(--ink);">
+  <div class="section__head">
+    <span class="kicker">PREVIEW</span>
+    <h2 id="mocks-title" class="section__title">מה רואים בכל <span class="ul">שלב</span></h2>
+    <p class="section__deck">בואו נראה איך זה נראה בפועל בכל אחד מהשלבים.</p>
+  </div>
+  
+  <div class="mocks-grid stagger">
+    <div class="mock-card">
+      <div class="mock" aria-label="מוק שאלות אפיון">
+        <div class="mock__head"><div class="mock__dots"><span></span><span></span><span></span></div><span class="mock__title">point-intake.chat</span></div>
+        <div class="mock__chat-container">
+          <div class="mock__chat-bubble mock__chat-bubble--agent">
+            <strong>Point:</strong> היי! בואו נבנה את המצגת שלכם. מי קהל היעד ועל מה נדבר היום?
+          </div>
+          <div class="mock__chat-bubble mock__chat-bubble--user">
+            <strong>הלומד:</strong> מצגת גיוס (Pitch) למשקיעי Seed על מוצר שנקרא ColorTune. יש לי 12 דקות, והמצגת בעברית.
+          </div>
+          <div class="mock__chat-bubble mock__chat-bubble--agent">
+            <strong>Point:</strong> מעולה, רשמתי לפניי. קהל: משקיעים. אורך: 12 דק'. שפה: עברית. רוצה שנתחיל לבנות את מתווה השקפים?
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Point שואל שאלות קצרות ועוזר לכם לזקק את התוכן</p>
+    </div>
+    
+    <div class="mock-card">
+      <div class="mock" aria-label="מוק קובץ Handoff">
+        <div class="mock__head"><div class="mock__dots"><span></span><span></span><span></span></div><span class="mock__title">build/handoff-runtime/handoff.md</span></div>
+        <pre class="mock__code"><code><span class="comment"># PointToPower Handoff v1.0</span>
+<span class="keyword">## Meta</span>
+audience: <span class="string">"Seed Investors"</span>
+genre: <span class="string">"pitch"</span>
+duration_minutes: <span class="string">12</span>
+target: <span class="string">"html"</span>
+
+<span class="keyword">## Slides</span>
+<span class="heading">### Slide 1: The Accessibility Trap</span>
+- Density: 40% (Doumont conditional)
+- Core message: 96% of top web homepages fail accessibility
+- Speaker notes: "Start with the shock value of current stats..."</code></pre>
+      </div>
+      <p class="mock-caption">כך נראה קובץ מתווה התוכן המאורגן ש-Point מכין עבור POWER</p>
+    </div>
+    
+    <div class="mock-card">
+      <div class="mock" aria-label="מוק הצעות סגנון">
+        <div class="mock__head"><div class="mock__dots"><span></span><span></span><span></span></div><span class="mock__title">power-styles.tuple</span></div>
+        <div class="mock__chat-container" style="gap: 10px;">
+          <div class="mock__style-option mock__style-option--active">
+            <span class="mock__style-badge">Primary</span>
+            <div>
+              <strong>Quiet Luxury</strong> - קו נקי ויוקרתי, המון מרווח נשימה וצבעים רגועים. מושלם למשקיעים.
+            </div>
+          </div>
+          <div class="mock__style-option">
+            <span class="mock__style-badge">Alternative</span>
+            <div>
+              <strong>Editorial</strong> - מראה של מגזין יוקרתי, פונטים אלגנטיים וקריאות מדהימה.
+            </div>
+          </div>
+          <div class="mock__style-option">
+            <span class="mock__style-badge">Wildcard</span>
+            <div>
+              <strong>Brutalist</strong> - עיצוב מחוספס, בועט ונועז. מתאים למי שרוצה להתבלט בקהל.
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">POWER מציע לכם 3 סגנונות עיצוב שונים שמתאימים בדיוק לנושא</p>
+    </div>
+    
+    <div class="mock-card">
+      <div class="mock" aria-label="מוק פלטים סופיים">
+        <div class="mock__head"><div class="mock__dots"><span></span><span></span><span></span></div><span class="mock__title">power-output.txt</span></div>
+        <div class="mock__chat-container">
+          <div class="mock__chat-bubble mock__chat-bubble--agent" style="max-width: 100%; border-bottom-right-radius: 16px;">
+            <strong>=== Block A — הפרומפט הראשי (להעתקה ל-PowerPoint) ===</strong>
+            <br>
+            <span style="font-size:11px; color:var(--text-muted);">[הפרומפט שיעצב לכם שקפים מהממים בתוסף או ב-HTML...]</span>
+            <br><br>
+            <strong>=== Block B — פרומפטי visuals (לGemini / GPT) ===</strong>
+            <br>
+            <span style="font-size:11px; color:var(--text-muted);">Slide 1: Minimalist technical grid illustration of colors, emerald and soft gold, vector style...</span>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">התוצר הסופי: מעתיקים את פרומפט העיצוב לתוסף, ואת פרומפטי הוויזואלים לכלי יצירת התמונות</p>
+    </div>
+  </div>
+</section>
+
+<section id="value" aria-labelledby="value-title">
+  <div class="section__head">
+    <span class="kicker">VALUE</span>
+    <h2 id="value-title" class="section__title">למה לעבוד ככה? היתרונות שיעשו לכם <span class="ul">חיים קלים</span></h2>
+    <p class="section__deck">הדרך הפשוטה והחכמה ביותר להגיע למצגת מנצחת ומקצועית.</p>
+  </div>
+  
+  <div class="value-grid stagger">
+    <div class="value-card">
+      <div class="value-card__icon"><i class="ti ti-align-right"></i></div>
+      <h3>קודם כל המסר!</h3>
+      <p>כשמפרידים בין כתיבת התוכן לעיצוב, המצגת שלכם יוצאת חדה, ממוקדת ומדויקת. בלי להתפזר או ללכת לאיבוד ברעשי רקע מיותרים.</p>
+    </div>
+    
+    <div class="value-card">
+      <div class="value-card__icon"><i class="ti ti-award"></i></div>
+      <h3>חוקי הצגה שעובדים במציאות</h3>
+      <p>הסוכנים מטמיעים באופן אוטומטי עקרונות מקצועיים מוכחים – כמו פונטים נכונים, כמות טקסט מאוזנת ומסר אחד ברור לכל שקופית.</p>
+    </div>
+    
+    <div class="value-card">
+      <div class="value-card__icon"><i class="ti ti-device-laptop"></i></div>
+      <h3>שני פורמטים לבחירה</h3>
+      <p>תוכלו ליצור מצגת PowerPoint רגילה (דרך תוסף ה-Claude-in-PowerPoint) או לבנות מצגת HTML מעוצבת ודינמית ישירות ב-Claude.ai.</p>
+    </div>
+    
+    <div class="value-card">
+      <div class="value-card__icon"><i class="ti ti-refresh"></i></div>
+      <h3>שינויים ועדכונים ברגע</h3>
+      <p>צריכים לתקן משהו? מחליפים סגנון, מעדכנים תמונה או משנים צבעים בשניות. הסוכן זוכר את כל העבודה ולא צריך להתחיל מחדש.</p>
+    </div>
+  </div>
+</section>
+
+<section id="requirements" aria-labelledby="requirements-title" style="padding-top: 0;">
+  <div class="req-box stagger">
+    <div class="req-box__stamp"><i class="ti ti-info-circle"></i></div>
+    <div>
+      <h3 id="requirements-title" class="req-box__title">מה צריך כדי להתחיל?</h3>
+      <ul class="req-list">
+        <li class="req-item">
+          <i class="ti ti-circle-check"></i>
+          <div class="req-item__content">למצגות PowerPoint: צריך רישיון <strong>Copilot Pro</strong> או <strong>Teams</strong> (כדי להשתמש בתוסף Claude-in-PowerPoint).</div>
+        </li>
+        <li class="req-item">
+          <i class="ti ti-circle-check"></i>
+          <div class="req-item__content">למצגות HTML: מספיק להשתמש ב-<strong>Claude.ai</strong> הרגיל בדפדפן (פשוט וחינמי).</div>
+        </li>
+        <li class="req-item">
+          <i class="ti ti-circle-check"></i>
+          <div class="req-item__content">לעברית ו-NotebookLM: אם תרצו ליצור מהתוכן פודקאסט אודיו או סיכומי וידאו, נצרף לכם טיפים חשובים להתמודדות עם כיווניות עברית (RTL).</div>
+        </li>
+      </ul>
+    </div>
   </div>
 </section>
 
