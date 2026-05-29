@@ -3,668 +3,178 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PointToPower, שני סוכנים. תוכן ועיצוב. מצגת אחת.</title>
-<link rel="stylesheet" href="assets/colors_and_type.css">
+<title>PointToPower · שרשרת שני סוכנים לבניית מצגות</title>
+<meta name="description" content="שרשרת שני סוכנים לבניית מצגות שמתחילות מהתוכן: Point בונה את המסר, POWER בונה את השקפים. ל-Claude Code ו-Cowork.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=Varela+Round&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  /* ============================================================
-     Page-specific layout. Tokens come from colors_and_type.css.
-     ============================================================ */
-  body { min-height: 100vh; }
+  :root {
+    --ink: #064E3B; --spine-deep: #064E3B; --spine: #047857; --spine-light: #10B981;
+    --canvas: #FFF8EC; --cream: #FCEFD6; --purple: #6B46C1; --gold: #F59E0B;
+    --terracotta: #C2410C; --mint: #A7F3D0; --pink: #FBCFE8; --sky: #BAE6FD; --lavender: #DDD6FE;
+    --border: 3px solid var(--ink); --radius-card: 20px; --radius-pill: 999px;
+    --stamp: 0 6px 0 0 var(--ink); --stamp-sm: 0 4px 0 0 var(--ink);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin:0; font-family:'Varela Round',system-ui,sans-serif; background:var(--canvas);
+    color:var(--ink); min-height:100vh; line-height:1.55; overflow-x:hidden; }
+  .mono { font-family:'JetBrains Mono',monospace; direction:ltr; }
+  h1,h2,h3,h4 { font-family:'Rubik',sans-serif; margin:0; line-height:1.15; }
 
-  /* Sticky top nav */
-  .topnav {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(255, 251, 235, 0.92);
-    backdrop-filter: blur(10px);
-    border-bottom: 1.5px solid var(--border);
-  }
-  .topnav__inner {
-    max-width: 1280px; margin: 0 auto;
-    padding: var(--space-4) var(--space-6);
-    display: flex; align-items: center; justify-content: space-between; gap: var(--space-5);
-  }
-  .topnav__brand { display: flex; align-items: center; gap: var(--space-3); }
-  .topnav__brand img { height: 28px; width: auto; }
-  .topnav__brand strong {
-    font-family: var(--font-display); font-weight: 700;
-    color: var(--green-depth); font-size: 1.125rem;
-  }
-  .topnav__links { display: flex; gap: var(--space-5); }
-  .topnav__links a {
-    color: var(--text); text-decoration: none;
-    font-size: 0.95rem;
-    border-bottom: 2px solid transparent;
-    padding-bottom: 2px;
-    transition: border-color 150ms ease-out;
-  }
-  .topnav__links a:hover { border-color: var(--green-ui); }
+  .bg-deco { position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:
+      radial-gradient(circle at 12% 15%, var(--lavender) 0%, transparent 8%),
+      radial-gradient(circle at 88% 18%, var(--gold) 0%, transparent 6%),
+      radial-gradient(circle at 15% 82%, var(--mint) 0%, transparent 7%),
+      radial-gradient(circle at 85% 78%, var(--pink) 0%, transparent 8%);
+    opacity:0.35; }
+  .bg-deco::after { content:''; position:absolute; inset:0;
+    background-image: radial-gradient(circle, var(--ink) 1px, transparent 1.5px);
+    background-size:32px 32px; opacity:0.06; }
 
-  /* Hero */
-  .hero {
-    position: relative; overflow: hidden;
-    padding: var(--space-9) var(--space-6) var(--space-8);
-    text-align: center;
-  }
-  .hero::before, .hero::after {
-    content: ""; position: absolute; pointer-events: none;
-    width: 60vw; height: 60vw; border-radius: 50%;
-    filter: blur(80px); opacity: 0.35;
-  }
-  .hero::before {
-    background: var(--story-sun);
-    top: -20vw; left: -20vw;
-  }
-  .hero::after {
-    background: var(--story-sky);
-    bottom: -25vw; right: -20vw;
-  }
-  .hero__inner { position: relative; max-width: 920px; margin: 0 auto; }
-  .hero__eyebrow {
-    display: inline-block;
-    font-family: var(--font-display); font-weight: 600;
-    font-size: 0.875rem; letter-spacing: 0.06em;
-    color: var(--green-anchor);
-    background: var(--green-soft);
-    padding: 6px 14px; border-radius: var(--radius-pill);
-    margin-bottom: var(--space-5);
-  }
-  .hero__title {
-    font-family: var(--font-display); font-weight: 900;
-    font-size: clamp(3rem, 8vw, 6rem);
-    line-height: 1.05; letter-spacing: -0.02em;
-    color: var(--green-depth);
-    margin: 0 0 var(--space-4);
-  }
-  .hero__title .accent {
-    color: var(--green-anchor);
-  }
-  .hero__sub {
-    font-family: var(--font-body);
-    font-size: clamp(1.25rem, 2vw, 1.5rem);
-    line-height: 1.5;
-    color: var(--text);
-    margin: 0 auto var(--space-6); max-width: 640px;
-  }
-  .hero__cta { display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap; }
+  .wrap { position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 24px; }
 
-  /* Buttons (block-shadow signature) */
-  .btn {
-    display: inline-flex; align-items: center; gap: var(--space-2);
-    padding: 14px 28px;
-    font-family: var(--font-display); font-weight: 600;
-    font-size: 1.0625rem;
-    text-decoration: none;
-    border-radius: var(--radius-pill);
-    transition: transform 150ms ease-out, box-shadow 150ms ease-out;
-    cursor: pointer; border: none;
-  }
-  .btn--primary {
-    background: var(--green-anchor); color: var(--text-invert);
-    box-shadow: var(--block-shadow-primary);
-  }
-  .btn--primary:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--block-shadow-primary-hover);
-  }
-  .btn--primary:active {
-    transform: translateY(2px);
-    box-shadow: var(--block-shadow-primary-active);
-  }
-  .btn--secondary {
-    background: var(--bg-card); color: var(--green-depth);
-    box-shadow: var(--block-shadow-secondary);
-    border: 1.5px solid var(--green-anchor);
-  }
-  .btn--secondary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 0 0 var(--green-anchor);
-  }
+  .hero { text-align:center; padding:64px 24px 40px; }
+  .hero-badge { display:inline-flex; align-items:center; gap:8px; padding:6px 14px;
+    background:var(--spine-deep); color:var(--canvas); font-size:13px; font-weight:600;
+    border-radius:var(--radius-pill); margin-bottom:20px; direction:ltr; }
+  .hero-badge::before { content:''; width:8px; height:8px; border-radius:50%;
+    background:var(--spine-light); box-shadow:0 0 0 4px rgba(16,185,129,0.3); }
+  .hero h1 { font-size:clamp(40px,7vw,72px); font-weight:800; letter-spacing:-0.02em; margin-bottom:16px; direction:ltr; }
+  .hero h1 .accent { color:var(--purple); position:relative; display:inline-block; }
+  .hero h1 .accent::after { content:''; position:absolute; bottom:-4px; left:0; right:0; height:7px;
+    background:var(--gold); border-radius:999px; transform:skewX(-8deg); }
+  .hero p.lead { font-size:19px; max-width:640px; margin:0 auto 28px;
+    color:color-mix(in srgb, var(--ink) 82%, transparent); }
+  .hero-stats { display:inline-flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-bottom:32px; }
+  .stat-pill { background:var(--canvas); border:var(--border); border-radius:var(--radius-pill);
+    padding:8px 16px; font-weight:600; font-size:14px; box-shadow:var(--stamp-sm);
+    display:inline-flex; gap:6px; align-items:center; }
+  .stat-pill .num { color:var(--purple); font-weight:800; }
 
-  /* Section frame */
-  .section {
-    max-width: 1180px; margin: 0 auto;
-    padding: var(--space-8) var(--space-6);
-  }
-  .section__head {
-    text-align: center; margin-bottom: var(--space-7);
-  }
-  .section__eyebrow {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: var(--font-display); font-weight: 600;
-    font-size: 0.875rem; letter-spacing: 0.04em;
-    color: var(--green-anchor);
-    margin-bottom: var(--space-3);
-  }
-  .section__eyebrow::before, .section__eyebrow::after {
-    content: ""; display: inline-block; width: 28px; height: 2px;
-    background: var(--green-ui);
-  }
-  .section__title {
-    font-family: var(--font-display); font-weight: 800;
-    font-size: var(--fs-h1);
-    line-height: 1.15; color: var(--green-depth);
-    margin: 0 0 var(--space-3);
-  }
-  .section__sub {
-    font-size: 1.125rem; color: var(--text-muted);
-    max-width: 640px; margin: 0 auto;
-  }
+  .btn { display:inline-flex; align-items:center; gap:10px; font-family:'Rubik',sans-serif;
+    font-weight:700; font-size:17px; padding:14px 26px; border-radius:var(--radius-pill);
+    text-decoration:none; border:var(--border); cursor:pointer; transition:transform .18s, box-shadow .18s; }
+  .btn-primary { background:var(--spine); color:#fff; box-shadow:var(--stamp); }
+  .btn-primary:hover { transform:translate(-2px,-3px); box-shadow:0 9px 0 0 var(--ink); }
+  .btn-primary:active { transform:translate(0,1px); box-shadow:0 3px 0 0 var(--ink); }
+  .btn-ghost { background:var(--canvas); color:var(--ink); box-shadow:var(--stamp-sm); }
+  .btn-ghost:hover { background:var(--cream); }
+  .btn-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
 
-  /* Two-agent role cards */
-  .agents { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-6); }
-  @media (max-width: 760px) { .agents { grid-template-columns: 1fr; } }
-  .agent-card {
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-sm);
-    transition: transform 150ms ease-out, box-shadow 150ms ease-out;
-    position: relative; overflow: hidden;
-  }
-  .agent-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-  .agent-card__motif {
-    width: 64px; height: 64px;
-    background: var(--green-soft);
-    border-radius: var(--radius-md);
-    display: inline-flex; align-items: center; justify-content: center;
-    margin-bottom: var(--space-4);
-  }
-  .agent-card__motif img { width: 40px; height: 40px; }
-  .agent-card__role {
-    display: inline-block;
-    font-family: var(--font-display); font-weight: 600;
-    font-size: 0.75rem; letter-spacing: 0.08em;
-    color: var(--green-anchor); text-transform: uppercase;
-    margin-bottom: var(--space-2);
-  }
-  .agent-card__name {
-    font-family: var(--font-display); font-weight: 800;
-    font-size: 2rem; line-height: 1.1;
-    color: var(--green-depth);
-    margin: 0 0 var(--space-3);
-  }
-  .agent-card__assertion {
-    font-size: 1.0625rem; line-height: 1.55;
-    color: var(--text); margin: 0 0 var(--space-5);
-  }
-  .agent-card__list {
-    list-style: none; padding: 0; margin: 0;
-    display: grid; gap: var(--space-3);
-  }
-  .agent-card__list li {
-    display: flex; gap: var(--space-3); align-items: flex-start;
-    font-size: 1rem; line-height: 1.5; color: var(--text);
-  }
-  .agent-card__list li::before {
-    content: ""; flex-shrink: 0;
-    width: 8px; height: 8px; margin-top: 9px;
-    background: var(--green-ui);
-    border-radius: 2px; transform: rotate(45deg);
-  }
-  .agent-card--power .agent-card__motif { background: var(--info-bg); }
-  .agent-card--power .agent-card__role { color: var(--info); }
+  .sec-head { display:flex; align-items:baseline; gap:14px; margin:40px 0 22px; padding-bottom:12px;
+    border-bottom:3px dashed color-mix(in srgb, var(--ink) 25%, transparent); }
+  .sec-tag { font-family:'Rubik',sans-serif; font-weight:800; font-size:13px; background:var(--ink);
+    color:var(--canvas); padding:4px 12px; border-radius:var(--radius-pill); direction:ltr; }
+  .sec-head h2 { font-size:28px; font-weight:700; }
 
-  /* How-it-works flow */
-  .flow {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-4);
-    counter-reset: step;
-  }
-  @media (max-width: 900px) { .flow { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 540px) { .flow { grid-template-columns: 1fr; } }
-  .flow-step {
-    position: relative;
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5) var(--space-5) var(--space-5);
-    box-shadow: var(--shadow-sm);
-  }
-  .flow-step__num {
-    counter-increment: step;
-    position: absolute; top: -16px; right: -16px;
-    width: 44px; height: 44px;
-    background: var(--green-anchor); color: var(--text-invert);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display); font-weight: 800; font-size: 1.125rem;
-    box-shadow: 0 4px 0 0 var(--green-depth);
-  }
-  .flow-step__num::before { content: counter(step); }
-  .flow-step__title {
-    font-family: var(--font-display); font-weight: 700;
-    font-size: 1.125rem; color: var(--green-depth);
-    margin: var(--space-2) 0 var(--space-2);
-  }
-  .flow-step__body {
-    font-size: 0.9375rem; line-height: 1.5;
-    color: var(--text); margin: 0;
-  }
-  .flow-step__tool {
-    display: inline-block; margin-top: var(--space-3);
-    font-family: var(--font-mono); font-size: 0.8125rem;
-    color: var(--info); background: var(--info-bg);
-    padding: 2px 10px; border-radius: var(--radius-pill);
-    direction: ltr; unicode-bidi: isolate;
-  }
+  /* Two-agent duo */
+  .duo { display:grid; grid-template-columns:1fr auto 1fr; align-items:stretch; gap:18px; }
+  .agent-card { position:relative; background:var(--canvas); border:var(--border);
+    border-radius:var(--radius-card); padding:26px; box-shadow:var(--stamp); overflow:hidden; }
+  .agent-card::before { content:''; position:absolute; top:-18px; inset-inline-end:-18px;
+    width:72px; height:72px; border-radius:50%; opacity:.22; z-index:0; }
+  .agent-card.point::before { background:var(--purple); }
+  .agent-card.power::before { background:var(--gold); }
+  .agent-kicker { font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600;
+    direction:ltr; color:color-mix(in srgb, var(--ink) 55%, transparent); position:relative; z-index:1; }
+  .agent-card h3 { font-size:26px; font-weight:800; margin:6px 0 10px; direction:ltr; position:relative; z-index:1; }
+  .agent-card.point h3 { color:var(--purple); }
+  .agent-card.power h3 { color:var(--terracotta); }
+  .agent-card p { font-size:15px; margin:0; position:relative; z-index:1;
+    color:color-mix(in srgb, var(--ink) 80%, transparent); }
+  .duo-arrow { align-self:center; font-size:34px; font-weight:800; color:var(--spine);
+    direction:ltr; font-family:'Rubik',sans-serif; }
 
-  /* Install (three formats) */
-  .formats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
-  @media (max-width: 900px) { .formats { grid-template-columns: 1fr; } }
-  .format-card {
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-6);
-    box-shadow: var(--shadow-sm);
-    display: flex; flex-direction: column;
-    transition: transform 150ms ease-out, box-shadow 150ms ease-out;
-  }
-  .format-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-  .format-card__chip {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: var(--font-display); font-weight: 600;
-    font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
-    color: var(--green-anchor);
-    background: var(--green-soft);
-    padding: 4px 12px; border-radius: var(--radius-pill);
-    align-self: flex-start; margin-bottom: var(--space-4);
-  }
-  .format-card__title {
-    font-family: var(--font-display); font-weight: 800;
-    font-size: 1.5rem; color: var(--green-depth);
-    margin: 0 0 var(--space-2);
-  }
-  .format-card__sub {
-    font-size: 0.9375rem; line-height: 1.5;
-    color: var(--text-muted);
-    margin: 0 0 var(--space-5);
-  }
-  .format-card__steps {
-    list-style: none; padding: 0; margin: 0 0 var(--space-5);
-    counter-reset: install;
-    display: grid; gap: var(--space-2);
-  }
-  .format-card__steps li {
-    counter-increment: install;
-    padding: var(--space-3); border-radius: var(--radius-sm);
-    background: var(--bg);
-    font-size: 0.9375rem; line-height: 1.5;
-    display: flex; gap: var(--space-3); align-items: flex-start;
-  }
-  .format-card__steps li::before {
-    content: counter(install);
-    flex-shrink: 0;
-    width: 24px; height: 24px;
-    background: var(--green-anchor); color: var(--text-invert);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display); font-weight: 700; font-size: 0.8125rem;
-  }
-  .format-card__path {
-    font-family: var(--font-mono); font-size: 0.8125rem;
-    color: var(--text-muted);
-    padding: var(--space-3);
-    background: var(--bg-soft);
-    border-radius: var(--radius-sm);
-    margin-top: auto;
-    direction: ltr; unicode-bidi: isolate;
-    word-break: break-all;
-  }
+  .steps { counter-reset:step; list-style:none; margin:0; padding:0; }
+  .steps li { position:relative; padding-inline-start:44px; margin-bottom:16px; font-size:16px; }
+  .steps li::before { counter-increment:step; content:counter(step); position:absolute;
+    inset-inline-start:0; top:-2px; width:30px; height:30px; border-radius:50%; background:var(--spine);
+    color:#fff; font-family:'Rubik',sans-serif; font-weight:800; display:flex; align-items:center;
+    justify-content:center; font-size:15px; }
+  .install { background:var(--cream); border:var(--border); border-radius:var(--radius-card);
+    padding:28px; box-shadow:var(--stamp); }
+  .cmd { display:inline-block; background:var(--ink); color:var(--mint); font-family:'JetBrains Mono',monospace;
+    font-size:14px; padding:2px 10px; border-radius:6px; direction:ltr; }
+  .note { font-size:14px; color:color-mix(in srgb, var(--ink) 65%, transparent); margin-top:16px; }
+  .note b { color:var(--purple); }
 
-  /* Callout */
-  .callout {
-    background: var(--warn-bg);
-    border: 1.5px solid var(--warn);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5) var(--space-6);
-    display: flex; gap: var(--space-4); align-items: flex-start;
-    margin: var(--space-6) auto 0;
-    max-width: 920px;
-  }
-  .callout__icon {
-    flex-shrink: 0;
-    width: 40px; height: 40px;
-    background: var(--warn); color: var(--bg);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-family: var(--font-display); font-weight: 900; font-size: 1.25rem;
-  }
-  .callout__body {
-    font-size: 1rem; line-height: 1.55;
-    color: var(--warn-text); margin: 0;
-  }
-  .callout__body strong { color: var(--warn-text); }
+  .footer { max-width:960px; margin:72px auto 0; padding:32px 24px;
+    border-top:3px dashed color-mix(in srgb, var(--ink) 25%, transparent); text-align:center;
+    font-size:14px; color:color-mix(in srgb, var(--ink) 65%, transparent); }
+  .footer a { color:var(--purple); font-weight:600; text-decoration:none; border-bottom:2px solid var(--gold); }
+  .footer a:hover { color:var(--spine-deep); }
 
-  /* Boundaries section */
-  .boundaries { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5); }
-  @media (max-width: 760px) { .boundaries { grid-template-columns: 1fr; } }
-  .boundary {
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5) var(--space-6);
-    box-shadow: var(--shadow-sm);
-  }
-  .boundary__head {
-    display: flex; gap: var(--space-3); align-items: center;
-    margin-bottom: var(--space-3);
-  }
-  .boundary__chip {
-    font-family: var(--font-display); font-weight: 700;
-    font-size: 0.8125rem; letter-spacing: 0.04em; text-transform: uppercase;
-    color: var(--green-anchor);
-    background: var(--green-soft);
-    padding: 4px 12px; border-radius: var(--radius-pill);
-  }
-  .boundary__chip--no {
-    color: var(--error); background: var(--error-bg);
-  }
-  .boundary__title {
-    font-family: var(--font-display); font-weight: 700;
-    font-size: 1.125rem; color: var(--green-depth);
-    margin: 0;
-  }
-  .boundary__body {
-    font-size: 0.9375rem; line-height: 1.55;
-    color: var(--text); margin: 0;
-  }
-
-  /* Footer */
-  footer.footer {
-    margin-top: var(--space-9);
-    padding: var(--space-7) var(--space-6) var(--space-6);
-    background: var(--green-depth); color: var(--text-invert);
-    text-align: center;
-  }
-  .footer__brand {
-    display: inline-flex; align-items: center; gap: var(--space-3);
-    margin-bottom: var(--space-4);
-  }
-  .footer__brand strong {
-    font-family: var(--font-display); font-weight: 800;
-    font-size: 1.25rem; color: var(--text-invert);
-  }
-  .footer__text {
-    font-size: 0.9375rem; line-height: 1.55;
-    color: rgba(255, 251, 235, 0.85);
-    max-width: 560px; margin: 0 auto var(--space-3);
-  }
-  .footer__meta {
-    font-size: 0.8125rem; color: rgba(255, 251, 235, 0.55);
-    margin-top: var(--space-4);
-  }
+  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{transition:none!important;} html{scroll-behavior:auto;} }
+  @media (max-width:680px){ .hero{padding:44px 16px 28px;} .duo{grid-template-columns:1fr;} .duo-arrow{transform:rotate(90deg);} }
 </style>
 </head>
 <body>
-
-<nav class="topnav">
-  <div class="topnav__inner">
-    <a href="#" class="topnav__brand">
-      <img src="assets/logo-color.svg" alt="Benefits">
-      <strong>PointToPower</strong>
-    </a>
-    <div class="topnav__links">
-      <a href="#what">מה זה</a>
-      <a href="#how">איך זה עובד</a>
-      <a href="#install">התקנה</a>
-    </div>
-  </div>
-</nav>
+<div class="bg-deco" aria-hidden="true"></div>
 
 <header class="hero">
-  <div class="hero__inner">
-    <div class="hero__eyebrow">Benefits ⋅ יחידת presentations</div>
-    <h1 class="hero__title">
-      <span class="accent">Point</span>ToPower
-    </h1>
-    <p class="hero__sub">
-      שני סוכנים. אחד מבנה תוכן, השני בונה דק. <strong>מצגת אחת,</strong> בעבודה נכונה.
-    </p>
-    <div class="hero__cta">
-      <a href="#install" class="btn btn--primary">איך מתקינים</a>
-      <a href="#how" class="btn btn--secondary">איך זה עובד</a>
-    </div>
+  <div class="hero-badge"><span>Claude Code</span><span class="mono">· Cowork</span></div>
+  <h1>Point<span class="accent">To</span>Power</h1>
+  <p class="lead">שרשרת של שני סוכנים לבניית מצגות שמתחילות מהתוכן — לא מהעיצוב. <b>Point</b> בונה את המסר, <b>POWER</b> בונה את השקפים.</p>
+  <div class="hero-stats">
+    <span class="stat-pill"><span class="num">2</span> סוכנים</span>
+    <span class="stat-pill"><span class="num">15+</span> סגנונות</span>
+    <span class="stat-pill"><span class="num">PPT</span> + HTML</span>
+  </div>
+  <div class="btn-row">
+    <a class="btn btn-primary" href="https://github.com/benefits-il/point-to-power">התקן עכשיו ←</a>
+    <a class="btn btn-ghost" href="https://github.com/benefits-il/point-to-power#use">איך זה עובד</a>
   </div>
 </header>
 
-<section class="section" id="what">
-  <div class="section__head">
-    <div class="section__eyebrow">מה זה</div>
-    <h2 class="section__title">תוכן תחילה. עיצוב אחר כך.</h2>
-    <p class="section__sub">
-      רוב הכלים מערבבים תוכן ועיצוב באותה שיחה ומאבדים את שניהם. PointToPower מפריד אותם לשני סוכנים שיודעים אחד על השני, ועוברים ביניהם handoff מובנה.
-    </p>
-  </div>
+<div class="wrap">
 
-  <div class="agents">
-    <article class="agent-card">
-      <div class="agent-card__motif">
-        <img src="assets/motifs/motif-speech.svg" alt="">
+  <section>
+    <div class="sec-head"><span class="sec-tag">THE DUO</span><h2>שני סוכנים, תפקיד אחד לכל אחד</h2></div>
+    <div class="duo">
+      <div class="agent-card point">
+        <div class="agent-kicker">AGENT 01</div>
+        <h3>Point</h3>
+        <p>מאפיין את התוכן בשאלות, מחיל דיסציפלינה מוכחת (טיפוגרפיה, צפיפות, מבנה סיפורי), ומפיק handoff מובנה ב-Markdown. ממקד אותך במסר לפני שנוגעים בעיצוב.</p>
       </div>
-      <div class="agent-card__role">סוכן תוכן</div>
-      <h3 class="agent-card__name">Point</h3>
-      <p class="agent-card__assertion">
-        שואל את השאלות הנכונות. בונה מתווה שקופיות לפי שיטות מוכחות. לא נוגע בעיצוב.
-      </p>
-      <ul class="agent-card__list">
-        <li>אליציטציה רחבה לפני כל שקופית, קהל, ז'אנר, אורך, target, שפה</li>
-        <li>מסר אחד לשקופית. כשנדחקים שניים, מציע לפצל</li>
-        <li>טיפוגרפיה, צפיפות, פתקי דובר, מבנה סיפורי לפי R1</li>
-        <li>ממליץ על פיצ'רי NotebookLM להשראה, לא לתוצר סופי</li>
-        <li>פולט handoff Markdown לפי חוזה Handoff v1.0</li>
-      </ul>
-    </article>
-
-    <article class="agent-card agent-card--power">
-      <div class="agent-card__motif">
-        <img src="assets/motifs/motif-sparkle.svg" alt="">
+      <div class="duo-arrow" aria-hidden="true">→</div>
+      <div class="agent-card power">
+        <div class="agent-kicker">AGENT 02</div>
+        <h3>POWER</h3>
+        <p>קורא את ה-handoff, בוחר סגנון מתוך קטלוג של 15+ אופציות, כותב פריסה לכל שקף, ומפיק פרומפט סופי — ל-Claude-in-PowerPoint או ל-HTML deck.</p>
       </div>
-      <div class="agent-card__role">סוכן בנייה</div>
-      <h3 class="agent-card__name">POWER</h3>
-      <p class="agent-card__assertion">
-        קורא את ה-handoff, בוחר סגנון מקטלוג, בונה את הדק. לא עורך תוכן.
-      </p>
-      <ul class="agent-card__list">
-        <li>Parse + validate את ה-handoff נגד החוזה</li>
-        <li>זיהוי target אוטומטי: HTML או PowerPoint</li>
-        <li>בחירת סגנון מתוך 35+ אופציות לפי Decision Tree של R3</li>
-        <li>פירוט layout פר-שקף ופרומפטי visuals מתואמי סגנון</li>
-        <li>פרומפט סופי ל-Claude-in-PowerPoint או ל-Claude.ai</li>
-        <li>iteration loop: visual / layout / style / target, בלי לאבד state</li>
-      </ul>
-    </article>
-  </div>
-
-  <div class="callout">
-    <div class="callout__icon">!</div>
-    <p class="callout__body">
-      <strong>הפרדת תחומים מוחלטת.</strong>
-      אם תבקש מ-POWER לשנות מסר של שקופית, הוא יחזיר אותך ל-Point. אם תבקש מ-Point להציע פלטה, הוא יחזיר אותך ל-POWER. זה לא באג, זאת הסיבה שזה עובד.
-    </p>
-  </div>
-</section>
-
-<section class="section" id="how" style="background: linear-gradient(180deg, transparent 0%, var(--bg-soft) 50%, transparent 100%); border-radius: var(--radius-xl); margin-top: var(--space-7);">
-  <div class="section__head">
-    <div class="section__eyebrow">איך זה עובד</div>
-    <h2 class="section__title">ארבעה צעדים, סוכן עובר לסוכן</h2>
-    <p class="section__sub">
-      אתה לא צריך לזכור פורמטים או לחזור על עצמך. ה-handoff בין הסוכנים שומר את כל ה-state.
-    </p>
-  </div>
-
-  <div class="flow">
-    <article class="flow-step">
-      <div class="flow-step__num"></div>
-      <h3 class="flow-step__title">אליציטציה</h3>
-      <p class="flow-step__body">
-        Point שואל שאלות עד שכל ה-Meta מלא ויש לפחות יחידת תוכן אחת. ברירות מחדל סבירות במקום שאלות פתוחות.
-      </p>
-      <span class="flow-step__tool">Point</span>
-    </article>
-
-    <article class="flow-step">
-      <div class="flow-step__num"></div>
-      <h3 class="flow-step__title">handoff</h3>
-      <p class="flow-step__body">
-        Point פולט קובץ Markdown מובנה: Meta, Slides, Tail. או נשמר ב-handoff-runtime, או נדבק ב-POWER ידנית.
-      </p>
-      <span class="flow-step__tool">Handoff v1.0</span>
-    </article>
-
-    <article class="flow-step">
-      <div class="flow-step__num"></div>
-      <h3 class="flow-step__title">סגנון + layout</h3>
-      <p class="flow-step__body">
-        POWER מאמת מול החוזה, מציע סגנון (primary / alternative / wildcard), כותב layout פר-שקף וגם פרומפטים לוויזואלים.
-      </p>
-      <span class="flow-step__tool">POWER</span>
-    </article>
-
-    <article class="flow-step">
-      <div class="flow-step__num"></div>
-      <h3 class="flow-step__title">פרומפט סופי</h3>
-      <p class="flow-step__body">
-        POWER פולט בלוק להעתקה, ל-Claude-in-PowerPoint או ל-Claude.ai. הדק נבנה אצלך, עם state שמור ל-iteration.
-      </p>
-      <span class="flow-step__tool">Claude / PowerPoint</span>
-    </article>
-  </div>
-</section>
-
-<section class="section">
-  <div class="section__head">
-    <div class="section__eyebrow">גבולות גזרה</div>
-    <h2 class="section__title">איזה סוכן עושה מה</h2>
-  </div>
-
-  <div class="boundaries">
-    <div class="boundary">
-      <div class="boundary__head">
-        <span class="boundary__chip">Point</span>
-        <h3 class="boundary__title">תוכן</h3>
-      </div>
-      <p class="boundary__body">
-        מסרים, מבנה סיפורי, מי הקהל, מה האורך, אילו שקופיות, מה speaker notes. כל שאלה על עיצוב, חוזרת ל-POWER.
-      </p>
     </div>
+  </section>
 
-    <div class="boundary">
-      <div class="boundary__head">
-        <span class="boundary__chip">POWER</span>
-        <h3 class="boundary__title">עיצוב ובנייה</h3>
-      </div>
-      <p class="boundary__body">
-        סגנון, פלטה, פונטים, layout, visuals, target. כל בקשה לשינוי תוכן, חוזרת ל-Point עם snapshot של ה-state.
-      </p>
-    </div>
+  <section>
+    <div class="sec-head"><span class="sec-tag">FLOW</span><h2>איך זה עובד</h2></div>
+    <ol class="steps">
+      <li>מפעילים את <span class="cmd">/point</span> — ועונים על שאלות האפיון בעברית.</li>
+      <li>Point מייצר handoff מובנה ב-Markdown עם כל התוכן והמבנה.</li>
+      <li>מפעילים את <span class="cmd">/power</span> — שמציע סגנון ראשי, חלופי ו-wildcard.</li>
+      <li>POWER מפיק את הפרומפט הסופי ליעד שבחרת (PowerPoint או HTML).</li>
+      <li>מאיטרציה: "תוסיף ויזואל", "עבור ל-dark mode" — POWER שומר state ומריץ מחדש רק את מה שהשתנה.</li>
+    </ol>
+  </section>
 
-    <div class="boundary">
-      <div class="boundary__head">
-        <span class="boundary__chip boundary__chip--no">לא בתחום</span>
-        <h3 class="boundary__title">לא ייצוא PDF</h3>
-      </div>
-      <p class="boundary__body">
-        POWER מפיק פרומפט לכלי החיצוני (Claude-in-PowerPoint או Claude.ai). הוא לא מייצא PDF, לא שולח מייל, ולא מעלה לדרייב.
-      </p>
-    </div>
-
-    <div class="boundary">
-      <div class="boundary__head">
-        <span class="boundary__chip boundary__chip--no">לא תרגול</span>
-        <h3 class="boundary__title">לא חזרות והעברה</h3>
-      </div>
-      <p class="boundary__body">
-        אחרי שהדק נבנה, התרגול וההעברה הם עליך. הסוכנים לא מאמנים נואם, לא בודקים תזמון, ולא מספקים feedback על הקלטה.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="install">
-  <div class="section__head">
-    <div class="section__eyebrow">התקנה</div>
-    <h2 class="section__title">שלוש דרכים להתקין</h2>
-    <p class="section__sub">
-      אותם שני סוכנים, שלוש אריזות. בחר את הסביבה שבה אתה עובד.
-    </p>
-  </div>
-
-  <div class="formats">
-    <article class="format-card">
-      <span class="format-card__chip">פלאגין</span>
-      <h3 class="format-card__title">Claude Code</h3>
-      <p class="format-card__sub">
-        להתקנה כפלאגין בתוך Claude Code. סוכנים, סקילים ופקודות נטענים אוטומטית.
-      </p>
-      <ol class="format-card__steps">
-        <li>העתק את התיקייה <code>claude-code/</code> ל-Claude Code plugins folder</li>
-        <li>הפעל מחדש את Claude Code</li>
-        <li>הפעל את <code>/point</code> לפתיחת סשן תוכן</li>
-        <li>אחרי handoff: <code>/power</code> לבנייה</li>
+  <section>
+    <div class="sec-head"><span class="sec-tag">INSTALL</span><h2>התקנה</h2></div>
+    <div class="install">
+      <ol class="steps">
+        <li><b>Claude Code:</b> העתק את התיקייה לתיקיית ה-plugins (או התקן דרך marketplace) והפעל מחדש.</li>
+        <li><b>Cowork:</b> התקן דרך ה-marketplace, או שים את התיקייה בנתיב ה-plugins המקומי וטען מחדש.</li>
+        <li>ודא ששתי הפקודות רשומות: <span class="cmd">/point</span> ו-<span class="cmd">/power</span>.</li>
       </ol>
-      <div class="format-card__path">repos/plugins/point-to-power/claude-code/</div>
-    </article>
+      <p class="note"><b>מניפסט אחד</b> (<span class="mono">.claude-plugin/plugin.json</span>) משותף לשתי הסביבות — שתיהן מזהות את ה-plugin אוטומטית, בלי הגדרות נוספות.</p>
+    </div>
+  </section>
 
-    <article class="format-card">
-      <span class="format-card__chip">פלאגין</span>
-      <h3 class="format-card__title">Cowork</h3>
-      <p class="format-card__sub">
-        אותו פורמט, להתקנה ב-Cowork. דרך marketplace או local plugin manifest.
-      </p>
-      <ol class="format-card__steps">
-        <li>העלה את התיקייה <code>cowork/</code> ל-Cowork plugins</li>
-        <li>אשר את ה-manifest ב-Cowork UI</li>
-        <li>הפעל את הסוכנים מתוך ה-plugins panel</li>
-        <li>זרימה זהה ל-Claude Code</li>
-      </ol>
-      <div class="format-card__path">repos/plugins/point-to-power/cowork/</div>
-    </article>
-
-    <article class="format-card">
-      <span class="format-card__chip">ידני</span>
-      <h3 class="format-card__title">Claude.ai Projects</h3>
-      <p class="format-card__sub">
-        בלי תלות בפלאגין. שני Projects נפרדים ב-Claude.ai, עם system prompt + knowledge files.
-      </p>
-      <ol class="format-card__steps">
-        <li>צור Project ב-Claude.ai בשם Point, הדבק את ה-system prompt</li>
-        <li>העלה את 20 קבצי ה-knowledge של Point</li>
-        <li>חזור על אותו דבר ב-Project שני בשם POWER (17 קבצים)</li>
-        <li>העברת handoff: copy-paste ידני בין שני ה-Projects</li>
-      </ol>
-      <div class="format-card__path">repos/projects/point-to-power/</div>
-    </article>
-  </div>
-
-  <div class="callout">
-    <div class="callout__icon">!</div>
-    <p class="callout__body">
-      <strong>הערות פלטפורמה.</strong>
-      ל-target PowerPoint נדרש Copilot Pro או Teams license (תוסף Claude-in-PowerPoint). ל-target HTML נדרש Claude.ai רגיל, <strong>לא</strong> Claude Code. תוכן בעברית עם NotebookLM Audio Overview: יוצמדו אזהרות RTL audio quality.
-    </p>
-  </div>
-</section>
+</div>
 
 <footer class="footer">
-  <div class="footer__brand">
-    <strong>Benefits</strong>
-  </div>
-  <p class="footer__text">
-    PointToPower v1.0.0, חלק מקורס Benefits לבניית מצגות עם AI. מתנת היחידה ללומדים, מותקנת מראש לפני השיעור.
-  </p>
-  <p class="footer__meta">
-    Built by Ben Akiva ⋅ Benefits
-  </p>
+  חלק מ-<a href="https://github.com/benefits-il">Benefits</a> · AI that finally fits · בן עקיבא
 </footer>
 
 </body>
