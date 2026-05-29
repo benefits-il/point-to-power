@@ -1,4 +1,4 @@
-# PointToPower (v1.0.0)
+# PointToPower (v1.0.1)
 
 Two-agent chain for content-first presentation building:
 
