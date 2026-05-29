@@ -1,0 +1,20 @@
+{
+  "name": "benefits-plugins",
+  "description": "Benefits by Ben Akiva — Claude Code plugins. Hosts the Point-to-POWER content-first presentation chain.",
+  "owner": {
+    "name": "Benefits by Ben Akiva",
+    "url": "https://github.com/benefits-il"
+  },
+  "plugins": [
+    {
+      "name": "point-to-power",
+      "source": "./",
+      "description": "Two-agent chain for content-first presentation building: Point structures the message, POWER builds the deck.",
+      "version": "1.0.1",
+      "author": {
+        "name": "Benefits by Ben Akiva"
+      },
+      "keywords": ["presentations", "slides", "agents", "hebrew", "claude-code", "cowork"]
+    }
+  ]
+}
