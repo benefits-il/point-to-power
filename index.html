@@ -1,181 +1,270 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PointToPower · שרשרת שני סוכנים לבניית מצגות</title>
 <meta name="description" content="שרשרת שני סוכנים לבניית מצגות שמתחילות מהתוכן: Point בונה את המסר, POWER בונה את השקפים. ל-Claude Code ו-Cowork.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&family=Varela+Round&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Rubik:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
 <style>
   :root {
-    --ink: #064E3B; --spine-deep: #064E3B; --spine: #047857; --spine-light: #10B981;
-    --canvas: #FFF8EC; --cream: #FCEFD6; --purple: #6B46C1; --gold: #F59E0B;
-    --terracotta: #C2410C; --mint: #A7F3D0; --pink: #FBCFE8; --sky: #BAE6FD; --lavender: #DDD6FE;
-    --border: 3px solid var(--ink); --radius-card: 20px; --radius-pill: 999px;
-    --stamp: 0 6px 0 0 var(--ink); --stamp-sm: 0 4px 0 0 var(--ink);
+    --green-anchor:#047857; --green-ui:#10B981; --green-depth:#064E3B;
+    --green-soft:#D1FAE5; --green-mint:#6EE7B7; --green-teal:#2DD4BF;
+    --story-sun:#FCD34D; --story-cheek:#FB7185; --story-sky:#A78BFA; --story-leaf:#84CC16;
+    --terracotta:#E07856;
+    --bg:#FFFBEB; --paper:#FFFFFF; --soft:#FEF3C7;
+    --ink:#064E3B; --text:#064E3B; --text-muted:#4B5563; --text-soft:#6B7280;
+    --stamp:0 6px 0 0 var(--green-depth); --stamp-hover:0 8px 0 0 var(--green-depth); --stamp-active:0 2px 0 0 var(--green-depth);
   }
-  *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { margin:0; font-family:'Varela Round',system-ui,sans-serif; background:var(--canvas);
-    color:var(--ink); min-height:100vh; line-height:1.55; overflow-x:hidden; }
-  .mono { font-family:'JetBrains Mono',monospace; direction:ltr; }
-  h1,h2,h3,h4 { font-family:'Rubik',sans-serif; margin:0; line-height:1.15; }
-
-  .bg-deco { position:fixed; inset:0; pointer-events:none; z-index:0;
+  *,*::before,*::after { box-sizing:border-box; }
+  html,body { margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family:'Varela Round',system-ui,sans-serif; font-size:16px; line-height:1.6;
+    color:var(--text); background:var(--bg);
     background-image:
-      radial-gradient(circle at 12% 15%, var(--lavender) 0%, transparent 8%),
-      radial-gradient(circle at 88% 18%, var(--gold) 0%, transparent 6%),
-      radial-gradient(circle at 15% 82%, var(--mint) 0%, transparent 7%),
-      radial-gradient(circle at 85% 78%, var(--pink) 0%, transparent 8%);
-    opacity:0.35; }
-  .bg-deco::after { content:''; position:absolute; inset:0;
-    background-image: radial-gradient(circle, var(--ink) 1px, transparent 1.5px);
-    background-size:32px 32px; opacity:0.06; }
+      radial-gradient(circle at 12% 18%, rgba(167,139,250,0.08) 0, transparent 90px),
+      radial-gradient(circle at 88% 35%, rgba(252,211,77,0.08) 0, transparent 120px),
+      radial-gradient(circle at 50% 90%, rgba(110,231,183,0.10) 0, transparent 160px);
+    background-attachment:fixed; overflow-x:hidden;
+  }
+  :is(a,button,input,[tabindex]):focus-visible { outline:3px solid var(--green-anchor); outline-offset:3px; border-radius:8px; }
+  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{ transition-duration:.01ms!important; animation-duration:.01ms!important; } html{scroll-behavior:auto;} }
+  ::-webkit-scrollbar{ width:12px; } ::-webkit-scrollbar-thumb{ background:var(--green-mint); border:3px solid var(--bg); border-radius:6px; }
+  .mono{ font-family:'JetBrains Mono',monospace; }
 
-  .wrap { position:relative; z-index:1; max-width:960px; margin:0 auto; padding:0 24px; }
+  /* NAV */
+  .nav{ position:sticky; top:0; z-index:50; background:rgba(255,251,235,0.92); backdrop-filter:blur(10px); border-bottom:2.5px solid var(--ink); }
+  .nav__inner{ max-width:1160px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; gap:18px; }
+  .logo{ display:inline-flex; align-items:center; gap:10px; font-family:'Rubik',sans-serif; font-weight:800; font-size:19px; color:var(--ink); text-decoration:none; }
+  .logo__mark{ width:38px; height:38px; background:var(--green-anchor); border:2.5px solid var(--ink); border-radius:12px; display:grid; place-items:center; color:#fff; box-shadow:3px 3px 0 0 var(--ink); transition:transform .2s cubic-bezier(.34,1.56,.64,1); }
+  .logo:hover .logo__mark{ transform:rotate(-8deg) scale(1.05); }
+  .logo__mark i{ font-size:20px; }
+  .nav__links{ margin-inline-start:auto; display:flex; gap:4px; align-items:center; }
+  .nav__link{ color:var(--ink); text-decoration:none; padding:8px 14px; font-weight:600; font-size:14px; border-radius:999px; transition:background .15s; }
+  .nav__link:hover{ background:var(--story-sun); }
+  .btn{ display:inline-flex; align-items:center; gap:8px; font-family:inherit; font-weight:700; font-size:15px; padding:12px 22px; border:2.5px solid var(--ink); border-radius:999px; cursor:pointer; text-decoration:none; transition:all .15s cubic-bezier(.34,1.56,.64,1); }
+  .btn--primary{ background:var(--green-anchor); color:#fff; box-shadow:var(--stamp); }
+  .btn--primary:hover{ background:var(--green-depth); box-shadow:var(--stamp-hover); transform:translateY(-2px); }
+  .btn--primary:active{ box-shadow:var(--stamp-active); transform:translateY(3px); }
+  .btn--secondary{ background:var(--paper); color:var(--ink); box-shadow:0 4px 0 0 var(--ink); }
+  .btn--secondary:hover{ background:var(--story-sun); box-shadow:0 6px 0 0 var(--ink); transform:translateY(-2px); }
+  .btn--ghost{ background:transparent; color:var(--ink); border-color:transparent; box-shadow:none; padding:10px 16px; }
+  .btn--ghost:hover{ background:var(--green-soft); border-color:var(--ink); }
+  .btn--lg{ padding:16px 30px; font-size:17px; }
 
-  .hero { text-align:center; padding:64px 24px 40px; }
-  .hero-badge { display:inline-flex; align-items:center; gap:8px; padding:6px 14px;
-    background:var(--spine-deep); color:var(--canvas); font-size:13px; font-weight:600;
-    border-radius:var(--radius-pill); margin-bottom:20px; direction:ltr; }
-  .hero-badge::before { content:''; width:8px; height:8px; border-radius:50%;
-    background:var(--spine-light); box-shadow:0 0 0 4px rgba(16,185,129,0.3); }
-  .hero h1 { font-size:clamp(40px,7vw,72px); font-weight:800; letter-spacing:-0.02em; margin-bottom:16px; direction:ltr; }
-  .hero h1 .accent { color:var(--purple); position:relative; display:inline-block; }
-  .hero h1 .accent::after { content:''; position:absolute; bottom:-4px; left:0; right:0; height:7px;
-    background:var(--gold); border-radius:999px; transform:skewX(-8deg); }
-  .hero p.lead { font-size:19px; max-width:640px; margin:0 auto 28px;
-    color:color-mix(in srgb, var(--ink) 82%, transparent); }
-  .hero-stats { display:inline-flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-bottom:32px; }
-  .stat-pill { background:var(--canvas); border:var(--border); border-radius:var(--radius-pill);
-    padding:8px 16px; font-weight:600; font-size:14px; box-shadow:var(--stamp-sm);
-    display:inline-flex; gap:6px; align-items:center; }
-  .stat-pill .num { color:var(--purple); font-weight:800; }
+  /* HERO */
+  .hero{ max-width:1160px; margin:0 auto; padding:80px 24px 56px; display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:center; position:relative; }
+  @media (max-width:880px){ .hero{ grid-template-columns:1fr; padding:48px 20px 36px; } }
+  .deco-circle{ position:absolute; top:36px; inset-inline-start:-36px; width:104px; height:104px; background:var(--story-sky); border:3px solid var(--ink); border-radius:50%; z-index:0; }
+  .deco-square{ position:absolute; top:210px; inset-inline-end:-26px; width:74px; height:74px; background:var(--story-sun); border:3px solid var(--ink); transform:rotate(20deg); z-index:0; }
+  .deco-squiggle{ position:absolute; bottom:6px; inset-inline-start:42%; width:230px; color:var(--green-mint); opacity:.55; z-index:0; }
+  .hero__content{ position:relative; z-index:1; }
+  .pill{ display:inline-flex; align-items:center; gap:8px; background:var(--story-sun); color:var(--ink); padding:6px 14px; border:2.5px solid var(--ink); border-radius:999px; font-size:13px; font-weight:700; box-shadow:3px 3px 0 0 var(--ink); margin-bottom:24px; }
+  .pill i{ font-size:16px; color:var(--green-anchor); }
+  .hero__title{ font-family:'Rubik',sans-serif; font-size:clamp(38px,6vw,68px); font-weight:800; color:var(--ink); line-height:1.05; letter-spacing:-1.5px; margin:0 0 22px; }
+  .hero__title .stamp{ display:inline-block; background:var(--green-anchor); color:#fff; padding:0 14px; border:3px solid var(--ink); border-radius:14px; box-shadow:5px 5px 0 0 var(--ink); transform:rotate(-2deg); }
+  .hero__title .hl{ background-image:linear-gradient(180deg,transparent 60%,var(--story-sun) 60%); padding:0 4px; }
+  .hero__deck{ font-size:19px; color:var(--text-muted); max-width:520px; margin:0 0 30px; line-height:1.55; }
+  .hero__deck strong{ color:var(--ink); background:var(--green-soft); padding:0 6px; border-radius:6px; }
+  .hero__cta-row{ display:flex; gap:14px; flex-wrap:wrap; }
 
-  .btn { display:inline-flex; align-items:center; gap:10px; font-family:'Rubik',sans-serif;
-    font-weight:700; font-size:17px; padding:14px 26px; border-radius:var(--radius-pill);
-    text-decoration:none; border:var(--border); cursor:pointer; transition:transform .18s, box-shadow .18s; }
-  .btn-primary { background:var(--spine); color:#fff; box-shadow:var(--stamp); }
-  .btn-primary:hover { transform:translate(-2px,-3px); box-shadow:0 9px 0 0 var(--ink); }
-  .btn-primary:active { transform:translate(0,1px); box-shadow:0 3px 0 0 var(--ink); }
-  .btn-ghost { background:var(--canvas); color:var(--ink); box-shadow:var(--stamp-sm); }
-  .btn-ghost:hover { background:var(--cream); }
-  .btn-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  /* HERO visual mock — flow Point -> POWER */
+  .mock{ position:relative; z-index:1; background:var(--paper); border:3px solid var(--ink); border-radius:24px; padding:20px; box-shadow:10px 10px 0 0 var(--ink); transform:rotate(2deg); }
+  .mock__head{ display:flex; align-items:center; gap:10px; padding-bottom:12px; border-bottom:2px dashed var(--ink); margin-bottom:14px; }
+  .mock__dots{ display:flex; gap:6px; }
+  .mock__dots span{ width:11px; height:11px; border-radius:50%; border:1.5px solid var(--ink); }
+  .mock__dots span:nth-child(1){ background:var(--story-cheek); } .mock__dots span:nth-child(2){ background:var(--story-sun); } .mock__dots span:nth-child(3){ background:var(--green-ui); }
+  .mock__title{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-soft); margin-inline-start:auto; direction:ltr; }
+  .row{ display:flex; align-items:center; gap:12px; padding:12px; background:var(--bg); border:2.5px solid var(--ink); border-radius:14px; box-shadow:3px 3px 0 0 var(--ink); }
+  .row__ico{ width:40px; height:40px; flex-shrink:0; border:2.5px solid var(--ink); border-radius:11px; display:grid; place-items:center; font-size:20px; box-shadow:2px 2px 0 0 var(--ink); }
+  .row__t{ font-family:'Rubik'; font-weight:700; font-size:14px; }
+  .row__s{ font-size:12px; color:var(--text-muted); }
+  .row__pill{ margin-inline-start:auto; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; padding:3px 9px; border:2px solid var(--ink); border-radius:999px; background:var(--green-soft); color:var(--green-depth); direction:ltr; }
+  .mock__arrow{ text-align:center; font-size:22px; color:var(--green-anchor); margin:8px 0; }
 
-  .sec-head { display:flex; align-items:baseline; gap:14px; margin:40px 0 22px; padding-bottom:12px;
-    border-bottom:3px dashed color-mix(in srgb, var(--ink) 25%, transparent); }
-  .sec-tag { font-family:'Rubik',sans-serif; font-weight:800; font-size:13px; background:var(--ink);
-    color:var(--canvas); padding:4px 12px; border-radius:var(--radius-pill); direction:ltr; }
-  .sec-head h2 { font-size:28px; font-weight:700; }
+  /* SECTION */
+  section{ max-width:1160px; margin:0 auto; padding:88px 24px; position:relative; }
+  .section__head{ text-align:center; margin:0 auto 52px; max-width:760px; }
+  .kicker{ display:inline-flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--green-anchor); text-transform:uppercase; letter-spacing:2px; font-weight:700; background:var(--green-soft); padding:4px 14px; border:2px solid var(--ink); border-radius:999px; box-shadow:2px 2px 0 0 var(--ink); margin-bottom:18px; }
+  .section__title{ font-family:'Rubik'; font-size:clamp(30px,4.5vw,44px); font-weight:800; color:var(--ink); line-height:1.12; letter-spacing:-.8px; margin:0 0 14px; }
+  .section__title .ul{ background-image:linear-gradient(180deg,transparent 64%,var(--story-cheek) 64%); padding:0 4px; }
+  .section__deck{ font-size:18px; color:var(--text-muted); margin:0; }
 
-  /* Two-agent duo */
-  .duo { display:grid; grid-template-columns:1fr auto 1fr; align-items:stretch; gap:18px; }
-  .agent-card { position:relative; background:var(--canvas); border:var(--border);
-    border-radius:var(--radius-card); padding:26px; box-shadow:var(--stamp); overflow:hidden; }
-  .agent-card::before { content:''; position:absolute; top:-18px; inset-inline-end:-18px;
-    width:72px; height:72px; border-radius:50%; opacity:.22; z-index:0; }
-  .agent-card.point::before { background:var(--purple); }
-  .agent-card.power::before { background:var(--gold); }
-  .agent-kicker { font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600;
-    direction:ltr; color:color-mix(in srgb, var(--ink) 55%, transparent); position:relative; z-index:1; }
-  .agent-card h3 { font-size:26px; font-weight:800; margin:6px 0 10px; direction:ltr; position:relative; z-index:1; }
-  .agent-card.point h3 { color:var(--purple); }
-  .agent-card.power h3 { color:var(--terracotta); }
-  .agent-card p { font-size:15px; margin:0; position:relative; z-index:1;
-    color:color-mix(in srgb, var(--ink) 80%, transparent); }
-  .duo-arrow { align-self:center; font-size:34px; font-weight:800; color:var(--spine);
-    direction:ltr; font-family:'Rubik',sans-serif; }
+  /* DUO */
+  .duo{ display:grid; grid-template-columns:1fr auto 1fr; gap:20px; align-items:stretch; }
+  @media (max-width:880px){ .duo{ grid-template-columns:1fr; } .duo__arrow{ transform:rotate(90deg); justify-self:center; } }
+  .agent{ position:relative; background:var(--paper); border:2.5px solid var(--ink); border-radius:24px; padding:32px 28px; box-shadow:6px 6px 0 0 var(--ink); overflow:hidden; transition:transform .2s cubic-bezier(.34,1.56,.64,1),box-shadow .2s; }
+  .agent:hover{ transform:translate(3px,-3px); box-shadow:9px 9px 0 0 var(--ink); }
+  .agent__deco{ position:absolute; top:-18px; inset-inline-start:-18px; width:80px; height:80px; opacity:.2; pointer-events:none; }
+  .agent__icon{ width:64px; height:64px; border:2.5px solid var(--ink); border-radius:18px; display:grid; place-items:center; margin-bottom:18px; box-shadow:3px 3px 0 0 var(--ink); font-size:30px; position:relative; z-index:1; }
+  .agent--point .agent__icon{ background:var(--story-sky); color:#fff; } .agent--power .agent__icon{ background:var(--story-sun); }
+  .agent__kicker{ font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:var(--text-soft); direction:ltr; position:relative; z-index:1; }
+  .agent h3{ font-family:'Rubik'; font-size:28px; font-weight:800; margin:4px 0 12px; direction:ltr; position:relative; z-index:1; }
+  .agent--point h3{ color:var(--story-sky); } .agent--power h3{ color:var(--terracotta); }
+  .agent p{ font-size:15px; color:var(--text-muted); margin:0; line-height:1.55; position:relative; z-index:1; }
+  .duo__arrow{ align-self:center; font-size:36px; font-weight:800; color:var(--green-anchor); direction:ltr; }
 
-  .steps { counter-reset:step; list-style:none; margin:0; padding:0; }
-  .steps li { position:relative; padding-inline-start:44px; margin-bottom:16px; font-size:16px; }
-  .steps li::before { counter-increment:step; content:counter(step); position:absolute;
-    inset-inline-start:0; top:-2px; width:30px; height:30px; border-radius:50%; background:var(--spine);
-    color:#fff; font-family:'Rubik',sans-serif; font-weight:800; display:flex; align-items:center;
-    justify-content:center; font-size:15px; }
-  .install { background:var(--cream); border:var(--border); border-radius:var(--radius-card);
-    padding:28px; box-shadow:var(--stamp); }
-  .cmd { display:inline-block; background:var(--ink); color:var(--mint); font-family:'JetBrains Mono',monospace;
-    font-size:14px; padding:2px 10px; border-radius:6px; direction:ltr; }
-  .note { font-size:14px; color:color-mix(in srgb, var(--ink) 65%, transparent); margin-top:16px; }
-  .note b { color:var(--purple); }
+  /* HOW */
+  .how{ background:var(--paper); border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); }
+  .how-grid{ display:grid; grid-template-columns:repeat(4,1fr); border:2.5px solid var(--ink); border-radius:24px; overflow:hidden; box-shadow:8px 8px 0 0 var(--ink); background:var(--bg); }
+  @media (max-width:880px){ .how-grid{ grid-template-columns:1fr; } }
+  .how-step{ padding:30px 24px; border-inline-end:2.5px solid var(--ink); }
+  .how-step:last-child{ border-inline-end:none; }
+  @media (max-width:880px){ .how-step{ border-inline-end:none; border-bottom:2.5px solid var(--ink); } .how-step:last-child{ border-bottom:none; } }
+  .how-step:nth-child(1){ background:var(--green-soft); } .how-step:nth-child(2){ background:var(--bg); } .how-step:nth-child(3){ background:var(--soft); } .how-step:nth-child(4){ background:var(--paper); }
+  .how-step__num{ display:inline-block; font-family:'JetBrains Mono',monospace; font-weight:700; background:var(--ink); color:var(--story-sun); padding:3px 12px; border-radius:999px; font-size:13px; margin-bottom:14px; direction:ltr; }
+  .how-step__title{ font-family:'Rubik'; font-weight:700; font-size:17px; margin:0 0 8px; }
+  .how-step__body{ font-size:14px; color:var(--text-muted); margin:0; line-height:1.55; }
+  .cmd{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:12px; background:var(--ink); color:var(--green-mint); padding:2px 8px; border-radius:5px; direction:ltr; }
 
-  .footer { max-width:960px; margin:72px auto 0; padding:32px 24px;
-    border-top:3px dashed color-mix(in srgb, var(--ink) 25%, transparent); text-align:center;
-    font-size:14px; color:color-mix(in srgb, var(--ink) 65%, transparent); }
-  .footer a { color:var(--purple); font-weight:600; text-decoration:none; border-bottom:2px solid var(--gold); }
-  .footer a:hover { color:var(--spine-deep); }
+  /* CTA */
+  .cta-final{ text-align:center; padding:88px 24px; position:relative; overflow:hidden; }
+  .cta-blob{ position:absolute; top:20px; inset-inline-start:8%; width:110px; z-index:0; }
+  .cta-star{ position:absolute; bottom:28px; inset-inline-end:7%; width:90px; z-index:0; }
+  .cta-final__in{ position:relative; z-index:1; }
+  .cta-final h2{ font-family:'Rubik'; font-size:clamp(34px,5vw,52px); font-weight:800; color:var(--ink); line-height:1.06; letter-spacing:-1.2px; margin:0 auto 22px; max-width:700px; }
+  .cta-final h2 .stamp{ display:inline-block; background:var(--story-sun); padding:0 12px; border:3px solid var(--ink); border-radius:14px; box-shadow:5px 5px 0 0 var(--ink); transform:rotate(-1.5deg); }
+  .cta-final p{ font-size:18px; color:var(--text-muted); max-width:560px; margin:0 auto 30px; }
 
-  @media (prefers-reduced-motion: reduce){ *,*::before,*::after{transition:none!important;} html{scroll-behavior:auto;} }
-  @media (max-width:680px){ .hero{padding:44px 16px 28px;} .duo{grid-template-columns:1fr;} .duo-arrow{transform:rotate(90deg);} }
+  /* FOOTER */
+  footer.foot{ background:var(--ink); color:rgba(255,255,255,.8); padding:48px 24px 24px; }
+  .foot__inner{ max-width:1160px; margin:0 auto; display:flex; flex-wrap:wrap; gap:24px 40px; align-items:center; justify-content:space-between; }
+  .foot__brand{ color:#fff; font-family:'Rubik'; font-weight:800; font-size:20px; display:inline-flex; align-items:center; gap:10px; }
+  .foot__brand .logo__mark{ box-shadow:none; }
+  .foot__links{ display:flex; gap:18px; flex-wrap:wrap; }
+  .foot__links a{ color:rgba(255,255,255,.75); text-decoration:none; font-size:14px; font-weight:600; }
+  .foot__links a:hover{ color:var(--story-sun); }
+  .foot__bottom{ max-width:1160px; margin:28px auto 0; padding-top:20px; border-top:1px solid rgba(255,255,255,.15); font-size:13px; color:rgba(255,255,255,.55); text-align:center; }
+
+  .stagger>*{ opacity:0; transform:translateY(20px); transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1); }
+  .stagger.in>*{ opacity:1; transform:translateY(0); }
+  .stagger.in>*:nth-child(2){ transition-delay:.1s; } .stagger.in>*:nth-child(3){ transition-delay:.2s; }
 </style>
 </head>
 <body>
-<div class="bg-deco" aria-hidden="true"></div>
 
-<header class="hero">
-  <div class="hero-badge"><span>Claude Code</span><span class="mono">· Cowork</span></div>
-  <h1>Point<span class="accent">To</span>Power</h1>
-  <p class="lead">שרשרת של שני סוכנים לבניית מצגות שמתחילות מהתוכן — לא מהעיצוב. <b>Point</b> בונה את המסר, <b>POWER</b> בונה את השקפים.</p>
-  <div class="hero-stats">
-    <span class="stat-pill"><span class="num">2</span> סוכנים</span>
-    <span class="stat-pill"><span class="num">15+</span> סגנונות</span>
-    <span class="stat-pill"><span class="num">PPT</span> + HTML</span>
-  </div>
-  <div class="btn-row">
-    <a class="btn btn-primary" href="https://github.com/benefits-il/point-to-power">התקן עכשיו ←</a>
-    <a class="btn btn-ghost" href="https://github.com/benefits-il/point-to-power#use">איך זה עובד</a>
+<header class="nav">
+  <div class="nav__inner">
+    <a href="#" class="logo"><span class="logo__mark"><i class="ti ti-presentation"></i></span> PointToPower</a>
+    <nav class="nav__links" aria-label="ניווט">
+      <a class="nav__link" href="#duo">הסוכנים</a>
+      <a class="nav__link" href="#how">איך זה עובד</a>
+      <a class="nav__link" href="#install">התקנה</a>
+      <a class="btn btn--ghost" href="https://github.com/benefits-il/point-to-power"><i class="ti ti-brand-github"></i> GitHub</a>
+      <a class="btn btn--primary" href="https://github.com/benefits-il/point-to-power"><i class="ti ti-download"></i> התקן</a>
+    </nav>
   </div>
 </header>
 
-<div class="wrap">
+<section class="hero">
+  <div class="deco-circle" aria-hidden="true"></div>
+  <div class="deco-square" aria-hidden="true"></div>
+  <svg class="deco-squiggle" viewBox="0 0 240 40" aria-hidden="true"><path d="M5,20 Q25,2 45,20 T85,20 T125,20 T165,20 T205,20 T235,20" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
 
-  <section>
-    <div class="sec-head"><span class="sec-tag">THE DUO</span><h2>שני סוכנים, תפקיד אחד לכל אחד</h2></div>
-    <div class="duo">
-      <div class="agent-card point">
-        <div class="agent-kicker">AGENT 01</div>
-        <h3>Point</h3>
-        <p>מאפיין את התוכן בשאלות, מחיל דיסציפלינה מוכחת (טיפוגרפיה, צפיפות, מבנה סיפורי), ומפיק handoff מובנה ב-Markdown. ממקד אותך במסר לפני שנוגעים בעיצוב.</p>
-      </div>
-      <div class="duo-arrow" aria-hidden="true">→</div>
-      <div class="agent-card power">
-        <div class="agent-kicker">AGENT 02</div>
-        <h3>POWER</h3>
-        <p>קורא את ה-handoff, בוחר סגנון מתוך קטלוג של 15+ אופציות, כותב פריסה לכל שקף, ומפיק פרומפט סופי — ל-Claude-in-PowerPoint או ל-HTML deck.</p>
-      </div>
+  <div class="hero__content">
+    <span class="pill"><i class="ti ti-robot"></i> Claude Code · Cowork</span>
+    <h1 class="hero__title">מצגות שמתחילות מ<span class="stamp">תוכן</span> — <span class="hl">לא מעיצוב.</span></h1>
+    <p class="hero__deck">שרשרת של שני סוכנים: <strong>Point</strong> מאפיין ומבנה את המסר ל-handoff, ו-<strong>POWER</strong> הופך אותו לפרומפט מצגת מעוצב — PowerPoint או HTML.</p>
+    <div class="hero__cta-row">
+      <a class="btn btn--primary btn--lg" href="https://github.com/benefits-il/point-to-power"><i class="ti ti-download"></i> התקן עכשיו</a>
+      <a class="btn btn--secondary btn--lg" href="#how"><i class="ti ti-route"></i> איך זה עובד</a>
     </div>
-  </section>
+  </div>
 
-  <section>
-    <div class="sec-head"><span class="sec-tag">FLOW</span><h2>איך זה עובד</h2></div>
-    <ol class="steps">
-      <li>מפעילים את <span class="cmd">/point</span> — ועונים על שאלות האפיון בעברית.</li>
-      <li>Point מייצר handoff מובנה ב-Markdown עם כל התוכן והמבנה.</li>
-      <li>מפעילים את <span class="cmd">/power</span> — שמציע סגנון ראשי, חלופי ו-wildcard.</li>
-      <li>POWER מפיק את הפרומפט הסופי ליעד שבחרת (PowerPoint או HTML).</li>
-      <li>מאיטרציה: "תוסיף ויזואל", "עבור ל-dark mode" — POWER שומר state ומריץ מחדש רק את מה שהשתנה.</li>
-    </ol>
-  </section>
+  <aside class="mock" aria-label="תצוגה מקדימה של הזרימה">
+    <div class="mock__head"><div class="mock__dots"><span></span><span></span><span></span></div><span class="mock__title">point → power</span></div>
+    <div class="row"><div class="row__ico" style="background:var(--story-sky);color:#fff"><i class="ti ti-message-circle"></i></div><div><div class="row__t">Point · אפיון</div><div class="row__s">שאלות → מבנה תוכן</div></div><span class="row__pill">/point</span></div>
+    <div class="mock__arrow" aria-hidden="true"><i class="ti ti-arrow-down"></i></div>
+    <div class="row"><div class="row__ico" style="background:var(--green-soft)"><i class="ti ti-file-text"></i></div><div><div class="row__t">handoff.md</div><div class="row__s">מסמך מובנה מוכן</div></div><span class="row__pill">MD</span></div>
+    <div class="mock__arrow" aria-hidden="true"><i class="ti ti-arrow-down"></i></div>
+    <div class="row"><div class="row__ico" style="background:var(--story-sun)"><i class="ti ti-presentation"></i></div><div><div class="row__t">POWER · deck</div><div class="row__s">סגנון + פרומפט סופי</div></div><span class="row__pill">/power</span></div>
+  </aside>
+</section>
 
-  <section>
-    <div class="sec-head"><span class="sec-tag">INSTALL</span><h2>התקנה</h2></div>
-    <div class="install">
-      <ol class="steps">
-        <li><b>Claude Code:</b> העתק את התיקייה לתיקיית ה-plugins (או התקן דרך marketplace) והפעל מחדש.</li>
-        <li><b>Cowork:</b> התקן דרך ה-marketplace, או שים את התיקייה בנתיב ה-plugins המקומי וטען מחדש.</li>
-        <li>ודא ששתי הפקודות רשומות: <span class="cmd">/point</span> ו-<span class="cmd">/power</span>.</li>
-      </ol>
-      <p class="note"><b>מניפסט אחד</b> (<span class="mono">.claude-plugin/plugin.json</span>) משותף לשתי הסביבות — שתיהן מזהות את ה-plugin אוטומטית, בלי הגדרות נוספות.</p>
+<section id="duo" aria-labelledby="duo-title">
+  <div class="section__head">
+    <span class="kicker">THE DUO</span>
+    <h2 id="duo-title" class="section__title">שני סוכנים, <span class="ul">תפקיד לכל אחד.</span></h2>
+    <p class="section__deck">המסר נבנה לפני העיצוב. כל סוכן עושה דבר אחד, ועושה אותו טוב.</p>
+  </div>
+  <div class="duo stagger">
+    <article class="agent agent--point">
+      <svg class="agent__deco" viewBox="0 0 160 160" aria-hidden="true" style="color:var(--story-sky)"><defs><pattern id="dp" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="4" cy="4" r="2.2" fill="currentColor"/></pattern></defs><rect width="160" height="160" fill="url(#dp)"/></svg>
+      <div class="agent__icon"><i class="ti ti-message-circle"></i></div>
+      <div class="agent__kicker">AGENT 01</div>
+      <h3>Point</h3>
+      <p>מאפיין את התוכן בשאלות, מחיל דיסציפלינה מוכחת (טיפוגרפיה, צפיפות, מבנה סיפורי), ומפיק handoff מובנה ב-Markdown. ממקד אותך במסר לפני שנוגעים בעיצוב.</p>
+    </article>
+    <div class="duo__arrow" aria-hidden="true">→</div>
+    <article class="agent agent--power">
+      <svg class="agent__deco" viewBox="0 0 140 140" aria-hidden="true"><g transform="translate(70 70)"><path d="M0,-60 L14,-18 L58,-18 L24,8 L36,52 L0,26 L-36,52 L-24,8 L-58,-18 L-14,-18 Z" fill="#FCD34D" stroke="#064E3B" stroke-width="3" stroke-linejoin="round"/></g></svg>
+      <div class="agent__icon"><i class="ti ti-presentation"></i></div>
+      <div class="agent__kicker">AGENT 02</div>
+      <h3>POWER</h3>
+      <p>קורא את ה-handoff, בוחר סגנון מתוך קטלוג של 15+ אופציות, כותב פריסה לכל שקף, ומפיק פרומפט סופי — ל-Claude-in-PowerPoint או ל-HTML deck.</p>
+    </article>
+  </div>
+</section>
+
+<section id="how" class="how" aria-labelledby="how-title">
+  <div class="section__head" style="max-width:none">
+    <span class="kicker">FLOW</span>
+    <h2 id="how-title" class="section__title">מרעיון ל-deck ב<span class="ul">ארבעה צעדים.</span></h2>
+  </div>
+  <div class="how-grid">
+    <div class="how-step"><span class="how-step__num">01</span><h4 class="how-step__title">מפעילים <span class="cmd">/point</span></h4><p class="how-step__body">עונים על שאלות האפיון בעברית. Point שולף את המסר מהראש שלך.</p></div>
+    <div class="how-step"><span class="how-step__num">02</span><h4 class="how-step__title">handoff.md</h4><p class="how-step__body">Point מייצר מסמך מובנה עם כל התוכן והמבנה — מוכן ל-POWER.</p></div>
+    <div class="how-step"><span class="how-step__num">03</span><h4 class="how-step__title">מפעילים <span class="cmd">/power</span></h4><p class="how-step__body">POWER מציע סגנון ראשי, חלופי ו-wildcard מתוך 15+ אופציות.</p></div>
+    <div class="how-step"><span class="how-step__num">04</span><h4 class="how-step__title">פרומפט סופי</h4><p class="how-step__body">ליעד שבחרת — PowerPoint או HTML. מאיטרציה: "תוסיף ויזואל", "dark mode".</p></div>
+  </div>
+</section>
+
+<section id="install" aria-labelledby="install-title">
+  <div class="section__head">
+    <span class="kicker">INSTALL</span>
+    <h2 id="install-title" class="section__title">מניפסט אחד, <span class="ul">שתי סביבות.</span></h2>
+    <p class="section__deck">אותו plugin עובד גם ב-Claude Code וגם ב-Cowork — בלי הגדרות נוספות.</p>
+  </div>
+  <div class="how-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="how-step"><span class="how-step__num">CC</span><h4 class="how-step__title">Claude Code</h4><p class="how-step__body">העתק את התיקייה לתיקיית ה-plugins (או דרך marketplace) והפעל מחדש.</p></div>
+    <div class="how-step"><span class="how-step__num">CW</span><h4 class="how-step__title">Cowork</h4><p class="how-step__body">התקן דרך ה-marketplace, או שים בנתיב ה-plugins המקומי וטען מחדש.</p></div>
+    <div class="how-step"><span class="how-step__num">✓</span><h4 class="how-step__title">אימות</h4><p class="how-step__body">ודא ששתי הפקודות רשומות: <span class="cmd">/point</span> ו-<span class="cmd">/power</span>.</p></div>
+  </div>
+</section>
+
+<section class="cta-final" aria-labelledby="final-title">
+  <svg class="cta-blob" viewBox="0 0 200 200" aria-hidden="true"><path d="M40,80 Q20,40 60,30 Q110,15 150,40 Q190,70 175,120 Q160,180 100,175 Q40,170 30,130 Q20,100 40,80 Z" fill="#6EE7B7" stroke="#064E3B" stroke-width="3" stroke-linejoin="round"/><circle cx="70" cy="80" r="6" fill="#064E3B"/><circle cx="130" cy="100" r="4" fill="#064E3B"/></svg>
+  <svg class="cta-star" viewBox="0 0 140 140" aria-hidden="true"><g transform="translate(70 70)"><path d="M0,-60 L14,-18 L58,-18 L24,8 L36,52 L0,26 L-36,52 L-24,8 L-58,-18 L-14,-18 Z" fill="#FCD34D" stroke="#064E3B" stroke-width="3" stroke-linejoin="round"/><circle r="10" fill="#FB7185" stroke="#064E3B" stroke-width="2.5"/></g></svg>
+  <div class="cta-final__in">
+    <span class="kicker"><i class="ti ti-sparkles"></i> מוכן לבנות</span>
+    <h2>תפסיק להילחם בעיצוב. <span class="stamp">תתחיל מהמסר.</span></h2>
+    <p>שני סוכנים, שרשרת אחת, מצגת שמתחילה מהתוכן. ל-Claude Code ו-Cowork.</p>
+    <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+      <a class="btn btn--primary btn--lg" href="https://github.com/benefits-il/point-to-power"><i class="ti ti-download"></i> התקן עכשיו</a>
+      <a class="btn btn--secondary btn--lg" href="https://github.com/benefits-il/point-to-power#use"><i class="ti ti-book"></i> מדריך שימוש</a>
     </div>
-  </section>
+  </div>
+</section>
 
-</div>
-
-<footer class="footer">
-  חלק מ-<a href="https://github.com/benefits-il">Benefits</a> · AI that finally fits · בן עקיבא
+<footer class="foot">
+  <div class="foot__inner">
+    <div class="foot__brand"><span class="logo__mark"><i class="ti ti-presentation"></i></span> PointToPower</div>
+    <div class="foot__links">
+      <a href="https://github.com/benefits-il/point-to-power">GitHub</a>
+      <a href="https://github.com/benefits-il/point-to-power#use">מדריך</a>
+      <a href="https://github.com/benefits-il">Benefits</a>
+    </div>
+  </div>
+  <div class="foot__bottom">חלק מ-Benefits · AI that finally fits · בן עקיבא</div>
 </footer>
 
+<script>
+  const io = new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); }); }, { threshold:0.15 });
+  document.querySelectorAll('.stagger').forEach(el=>io.observe(el));
+</script>
 </body>
 </html>
