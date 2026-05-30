@@ -36,9 +36,9 @@ POWER יודע ש-Point הוא הסוכן שמעליו בשרשרת PointToPower
 ## Environment
 
 *Tools.*
-- Read: גישה ל-references/, shared/, build/handoff-runtime/.
-- Write: לא כותב לאף קובץ קבוע. ה-output שלו הוא טקסט שמוצג ללומד.
-- Glob, Grep: חיפוש פנימי ב-references/.
+- Read: גישה ל-references/, shared/, ולתיקיית הפרויקט `build/<slug>/` (קורא את ה-handoff מ-`handoff/`; יכול לעיין ב-`content/` וב-`prompts/` להקשר, וב-`assets/` אם הלומד הוסיף מדיה).
+- Write: לא כותב לאף קובץ קבוע. ה-output שלו הוא טקסט שמוצג ללומד. (תיקיית `assets/` מתמלאת ע"י הלומד מהכלים החיצוניים, לא ע"י POWER.)
+- Glob, Grep: חיפוש פנימי ב-references/ ובתיקיות הפרויקט.
 
 *Out of scope.*
 - כתיבת קובץ דק סופי (PPT, HTML). זה התפקיד של Claude-in-PowerPoint או Claude.ai שמקבלים את הפרומפט.
@@ -211,7 +211,7 @@ POWER הוא stateless בין סשנים. בתוך סשן יש state machine ע�
 אין persistent memory. סשן חדש דורש handoff חדש.
 
 *Recovery from lost session.*
-אם הסשן נסגר ונפתח מחדש, הלומד צריך להדביק את ה-handoff שוב. POWER לא קורא קבצים מ-build/handoff-runtime/ בלי בקשה מפורשת. אם הלומד מבקש "המשך מאיפה שעצרנו" — בקש את ה-handoff המקורי + תיאור של הסטטוס האחרון.
+אם הסשן נסגר ונפתח מחדש, הלומד צריך להדביק את ה-handoff שוב. POWER לא קורא קבצים מ-`build/<slug>/handoff/` בלי בקשה מפורשת. אם הלומד מבקש "המשך מאיפה שעצרנו" — בקש את ה-handoff המקורי (או את ה-slug) + תיאור של הסטטוס האחרון.
 
 ## Iteration loop
 

@@ -274,11 +274,18 @@ When a schema bump ships, Point and POWER MUST bump in lockstep within the same 
 
 ## 7. Filesystem path (Claude Code and Cowork)
 
-When Point runs in the Claude Code plugin or the Cowork plugin, it writes handoff files to:
+When Point runs in the Claude Code plugin or the Cowork plugin, each project lives under its own per-project folder, and the handoff is written to the `handoff\` subfolder:
 
 ```
-build\handoff-runtime\<YYYYMMDD-HHMM>-<slug>.md
+build\<slug>\
+  content\    # learner's returned NotebookLM outputs (Point reads, Phase 4)
+  prompts\    # the NotebookLM kit Point emits (Phase 3)
+  assets\     # images/media (POWER / learner)
+  handoff\    # the handoff file, written Phase 6 after approval:
+              #   build\<slug>\handoff\<YYYYMMDD-HHMM>-<slug>.md
 ```
+
+This is a filesystem-location convention, not a schema change: the handoff file's structure (Sections 1-4) is identical regardless of where it is written, so moving the path does not bump the contract version.
 
 ### Components
 
@@ -288,15 +295,15 @@ build\handoff-runtime\<YYYYMMDD-HHMM>-<slug>.md
   2. A learner-supplied label captured during elicitation (e.g., `q3-board-deck`).
   3. The literal `untitled` when neither is available.
 
-The slug is ASCII, lowercase, words separated by hyphens. Maximum 40 chars.
+The slug is ASCII, lowercase, words separated by hyphens. Maximum 40 chars. The same slug names the project folder and the handoff filename.
 
 ### Directory creation
 
-Point's emit skill creates the `build\handoff-runtime\` directory if it does not exist. POWER's intake skill reads the most recent file by default, or a specific filename passed by the learner.
+Point's skills create the subfolders lazily as they write (`prompts\` in Phase 3, `handoff\` in Phase 6). POWER's intake skill reads the most recent handoff file across project folders by default, or a specific filename / project slug passed by the learner. See `shared/filesystem-conventions.md` for the full read-priority rules.
 
 ### Retention
 
-The plugin does not delete old handoff files. Cleanup is the learner's responsibility.
+The plugin does not delete old project folders or handoff files. Cleanup is the learner's responsibility.
 
 ---
 

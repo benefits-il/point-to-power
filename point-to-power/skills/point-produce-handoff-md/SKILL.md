@@ -1,7 +1,7 @@
 ---
 name: point-produce-handoff-md
-description: Activate when intake + slides + NotebookLM recommendations are ready and Point needs to emit the final handoff , assembles a PointToPower Handoff v1.0 Markdown file and self-validates against the contract before returning.
-version: 1.0.0
+description: Activate in Phase 6, only after the user has explicitly approved the co-edited content (content_approved=true). Assemble the final PointToPower Handoff v1.0 Markdown from the approved slides, self-validate against the contract, and write it to the project handoff/ folder.
+version: 2.0.0
 user-invocable: false
 disable-model-invocation: false
 allowed-tools:
@@ -13,24 +13,27 @@ allowed-tools:
 
 ## Purpose
 
-מרכיב את קובץ ההעברה הסופי בפורמט PointToPower Handoff v1.0, ומריץ נגדו את כל כללי ה-rejection מ-`shared/validation-rules.md` לפני שהוא חוזר. אם כלל נכשל, הסקיל מתקן באופן מקומי ומריץ מחדש. הסקיל הזה הוא הקצה האחרון של זרימת Point.
+מרכיב את קובץ ההעברה הסופי בפורמט PointToPower Handoff v1.0 **מתוכן מאושר בלבד**, ומריץ נגדו את כל כללי ה-rejection מ-`shared/validation-rules.md` לפני שהוא חוזר. אם כלל נכשל, הסקיל מתקן באופן מקומי ומריץ מחדש. הסקיל הזה הוא הקצה האחרון של זרימת Point.
 
 ## Inputs
 
+- **content_approved** (boolean). **precondition קשיח:** אם הוא לא `true`, אל תרץ. החזר לפונקציה הקוראת שצריך אישור (Phase 5). ה-handoff מורכב רק מתוכן שהלומד אישר, לעולם לא לפני.
 - **intake_record** (meta + content_units מקוריים, לרפרנס).
-- **slides** מ-`structure-content-to-slides`.
-- **notebooklm_recommendations** מ-`recommend-and-prompt-notebooklm` (יכול להיות list ריק).
+- **slides** מ-`structure-content-to-slides` (התוכן הערוך והמאושר).
+- **project_slug** (לחישוב נתיב הכתיבה `build/<slug>/handoff/`).
+- **notebooklm_recommendations** (אופציונלי, ברירת מחדל list ריק). בזרימה הנוכחית הערכה כבר נפלטה ל-`prompts/` ב-Phase 3, אז בדרך כלל זה ריק. אם הלומד ביקש שתיעוד של תוצר NotebookLM ספציפי ילווה את ה-handoff, אפשר לכלול 0..N רשומות לפי החוזה.
 - **notes_to_power** (טקסט עברי חופשי, אופציונלי, עד 400 מילים).
 - **channel** (enum: `filesystem` | `paste`). קובע אם הסקיל גם כותב לדיסק.
 
 ## Outputs
 
 - **handoff_markdown** (מחרוזת Markdown יחידה, תואמת מדויקת לחוזה).
-- **filesystem_path** (אם channel=filesystem), נתיב יחסי לקובץ שנכתב, למשל `build\handoff-runtime\20260604-2214-colortune-pitch-01.md`.
+- **filesystem_path** (אם channel=filesystem), נתיב יחסי לקובץ שנכתב, למשל `build\<slug>\handoff\20260604-2214-colortune-pitch-01.md`.
 - **warnings** (list אופציונלי), אזהרות שעלו בעת הגייט הפנימי אך לא חסמו (כרגע רק `forbidden-glyph`).
 
 ## Process
 
+0. **בדוק `content_approved`.** אם אינו `true`, עצור והחזר שצריך אישור (Phase 5). אל תרכיב כלום לפני אישור.
 1. קרא את `../../references/handoff-contract.md` במלואו. ההעברה חייבת להיות תואמת מדויקת לכל סעיף, Header, Meta, Slide blocks, Tail.
 2. קרא את `../../references/example-handoff.md` כדי לראות את המבנה המדויק על דוגמה חיה. השתמש בה כאנקור צורני.
 3. קרא את `../../shared/validation-rules.md` כדי להחזיק במוח את 15 כללי ה-rejection. אלה הכללים שתבדוק כל בנייה מולם.
@@ -69,9 +72,9 @@ allowed-tools:
 10. אחרי שעבר הגייט, הרץ פעם נוספת כדי לוודא שהתיקונים שלך לא הפרו כללים אחרים. הגייט אמור לחזור עם 0 rejections.
 11. אם channel=filesystem:
     - קרא את `../../shared/filesystem-conventions.md` לחישוב הנתיב.
-    - חשב slug: עדיפות session_id > learner_label > "untitled". נקה לאסקי lowercase עם מקפים.
+    - חשב slug: עדיפות session_id > learner_label > "untitled". נקה לאסקי lowercase עם מקפים. בדרך כלל זה ה-project_slug שכבר נקבע ב-Phase 2.
     - חשב timestamp בפורמט `YYYYMMDD-HHMM` של רגע הכתיבה.
-    - הרכב נתיב: `build\handoff-runtime\<timestamp>-<slug>.md`.
+    - הרכב נתיב: `build\<slug>\handoff\<timestamp>-<slug>.md`.
     - צור את הספרייה אם לא קיימת.
     - כתוב את הקובץ ב-UTF-8 בלי BOM. שורות LF (לא CRLF).
 12. החזר את handoff_markdown תמיד. אם channel=filesystem, החזר גם את filesystem_path. אם יש warnings, החזר אותן.

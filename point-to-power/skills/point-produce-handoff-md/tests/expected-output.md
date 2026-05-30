@@ -3,7 +3,7 @@
 The skill emits the file at:
 
 ```
-build\handoff-runtime\20260604-2214-colortune-pitch-01.md
+build\colortune-pitch-01\handoff\20260604-2214-colortune-pitch-01.md
 ```
 
 The file content is byte-equivalent to `references/example-handoff.md`. That fixture is, by design, the canonical PointToPower Handoff v1.0 sample, and the skill's job here is to recreate it from structured inputs.
@@ -18,7 +18,7 @@ handoff_markdown: |
   ...
   (full content of references/example-handoff.md)
 
-filesystem_path: build\handoff-runtime\20260604-2214-colortune-pitch-01.md
+filesystem_path: build\colortune-pitch-01\handoff\20260604-2214-colortune-pitch-01.md
 
 warnings: []
 ```

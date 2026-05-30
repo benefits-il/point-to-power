@@ -3,7 +3,7 @@
 # Run from anywhere; uses script-relative paths.
 #
 # Output (gitignored):
-#   claude-ai-project/point/knowledge-files/   (20 files)
+#   claude-ai-project/point/knowledge-files/   (21 files)
 #   claude-ai-project/power/knowledge-files/   (17 files)
 
 set -euo pipefail
@@ -20,7 +20,7 @@ POWER_OUT="$REPO_ROOT/claude-ai-project/power/knowledge-files"
 rm -rf "$POINT_OUT" "$POWER_OUT"
 mkdir -p "$POINT_OUT" "$POWER_OUT"
 
-# Point gets R1 (all 11), R2 (all 5), handoff-contract, example-handoff, plus 2 shared.
+# Point gets R1 (all 11), R2 (5 + kit catalog), handoff-contract, example-handoff, plus 2 shared.
 POINT_FILES=(
   R1-00-foundations.md
   R1-01-typography.md
@@ -38,6 +38,7 @@ POINT_FILES=(
   R2-addon-a-quick-reference.md
   R2-addon-b-patterns-cheatsheet.md
   R2-addon-c-stale-watch.md
+  R2-notebooklm-kit-catalog.md
   handoff-contract.md
   example-handoff.md
 )
@@ -87,7 +88,7 @@ POWER_COUNT=$(ls "$POWER_OUT" | wc -l)
 
 echo
 echo "Done."
-echo "  Point: $POINT_COUNT files (expected 20)"
+echo "  Point: $POINT_COUNT files (expected 21)"
 echo "  POWER: $POWER_COUNT files (expected 17)"
 echo
 echo "Next: upload these folders to your Claude.ai Projects."

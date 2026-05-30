@@ -1,9 +1,11 @@
 # Fixture: full input
 
-The combined output of `elicit-content-from-user` + `structure-content-to-slides` + `recommend-and-prompt-notebooklm` for the ColorTune pitch, plus a short notes_to_power paragraph.
+The combined, **approved** output of `elicit-content-from-user` + `structure-content-to-slides` for the ColorTune pitch, plus a short notes_to_power paragraph. The two `notebooklm_recommendations` below are optional in the v2 flow (the kit normally lives in `prompts/`); they are kept here to exercise the contract's Tail rendering.
 
 ```yaml
 channel: filesystem
+content_approved: true
+project_slug: colortune-pitch-01
 
 intake_record.meta:
   target: html
@@ -21,7 +23,7 @@ slides:
   (the 6 slides from the structure-content-to-slides expected-output.md fixture)
 
 notebooklm_recommendations:
-  (the 2 recommendations from the recommend-and-prompt-notebooklm expected-output.md fixture)
+  (optional in v2; two sample recommendations kept to exercise the Tail rendering. In a normal v2 run this is an empty list because the kit was already emitted to prompts/ in Phase 3.)
 
 notes_to_power: |
   הקהל מעורב, חצי טכני וחצי משקיעים. שמור על קצב מהיר בשקופיות 1 ו-2, ותן זמן נשימה בשקופית 4 שזו ה-wow.

@@ -331,7 +331,7 @@
   </div>
   <div class="how-grid">
     <div class="how-step"><span class="how-step__num">01</span><h4 class="how-step__title">מפעילים <span class="cmd">/point</span></h4><p class="how-step__body">עונים על שאלות האפיון בעברית. Point שולף את המסר מהראש שלך.</p></div>
-    <div class="how-step"><span class="how-step__num">02</span><h4 class="how-step__title">handoff.md</h4><p class="how-step__body">Point מייצר מסמך מובנה עם כל התוכן והמבנה — מוכן ל-POWER.</p></div>
+    <div class="how-step"><span class="how-step__num">02</span><h4 class="how-step__title">מחקר + handoff.md</h4><p class="how-step__body">Point נותן לך ערכת NotebookLM לחקור, ואחרי שאתם עורכים יחד ומאשרים — מייצר handoff מוכן ל-POWER.</p></div>
     <div class="how-step"><span class="how-step__num">03</span><h4 class="how-step__title">מפעילים <span class="cmd">/power</span></h4><p class="how-step__body">POWER מציע סגנון ראשי, חלופי ו-wildcard מתוך 15+ אופציות.</p></div>
     <div class="how-step"><span class="how-step__num">04</span><h4 class="how-step__title">פרומפט סופי</h4><p class="how-step__body">ליעד שבחרת — PowerPoint או HTML. מאיטרציה: "תוסיף ויזואל", "dark mode".</p></div>
   </div>
@@ -360,11 +360,11 @@
     <div class="timeline-item">
       <div class="timeline-item__badge">02</div>
       <div class="timeline-item__content">
-        <h4 class="timeline-item__title">שלב 2: יצירת מתווה שקפים מסודר <span class="timeline-item__tag">handoff.md</span></h4>
-        <p class="timeline-item__body">Point מארגן את כל הרעיונות שלכם למבנה שקפים הגיוני ומשכנע, ומסדר אותו בקובץ Markdown מיוחד.</p>
+        <h4 class="timeline-item__title">שלב 2: מחקר ב-NotebookLM ועריכה משותפת <span class="timeline-item__tag">handoff.md</span></h4>
+        <p class="timeline-item__body">Point נותן לכם מיד ערכת NotebookLM מלאה: מסמך מקור להעלאה, פרומפט מחקר, ופרומפטי Studio. אתם מריצים, מחזירים את התוצאות, והוא עורך אותן יחד אתכם לתוכן שקפים סופי.</p>
         <ul class="timeline-item__details">
-          <li>הוא דואג לזרימה סיפורית נכונה, מוודא שיש מסר אחד ברור בכל שקופית וכותב עבורכם פתקי דובר מפורטים.</li>
-          <li>הקובץ נשמר אוטומטית בתיקיית <code class="mono">build/handoff-runtime/</code> ומוכן מיד לשלב הבא.</li>
+          <li>כך התוכן מבוסס על מחקר אמיתי (תחרות, נתונים, הקשר) — לא על ניחושים. הוא דואג לזרימה סיפורית, מסר אחד לשקופית, ופתקי דובר.</li>
+          <li>רק אחרי שאתם מאשרים את התוכן, הוא מרכיב את ה-handoff בתיקיית <code class="mono">build/&lt;slug&gt;/handoff/</code> — מוכן לשלב הבא.</li>
         </ul>
       </div>
     </div>
@@ -436,7 +436,7 @@
     
     <div class="mock-card">
       <div class="mock" aria-label="מוק קובץ Handoff">
-        <div class="mock__head"><div class="mock__dots"><span></span><span></span><span></span></div><span class="mock__title">build/handoff-runtime/handoff.md</span></div>
+        <div class="mock__head"><div class="mock__dots"><span></span><span></span><span></span></div><span class="mock__title">build/&lt;slug&gt;/handoff/handoff.md</span></div>
         <pre class="mock__code"><code><span class="comment"># PointToPower Handoff v1.0</span>
 <span class="keyword">## Meta</span>
 audience: <span class="string">"Seed Investors"</span>

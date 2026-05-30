@@ -26,13 +26,13 @@ claude-ai-project/
 bash scripts/build-claude-ai-project.sh
 ```
 
-הסקריפט מעתיק את הקבצים הנחוצים לתוך `claude-ai-project/point/knowledge-files/` (20 קבצים) ו-`claude-ai-project/power/knowledge-files/` (17 קבצים). אחרי ההתקנה, אפשר למחוק את התיקיות האלה - הן לא נשמרות ב-git.
+הסקריפט מעתיק את הקבצים הנחוצים לתוך `claude-ai-project/point/knowledge-files/` (21 קבצים) ו-`claude-ai-project/power/knowledge-files/` (17 קבצים). אחרי ההתקנה, אפשר למחוק את התיקיות האלה - הן לא נשמרות ב-git.
 
 ## התקנת Point
 
 1. גשו ל-https://claude.ai וצרו Project חדש בשם `Point`.
 2. Project settings -> Instructions: הדביקו את כל התוכן של `point/system-prompt.md`.
-3. Project -> Files: העלו את כל 20 הקבצים מ-`point/knowledge-files/` (אחרי הרצת הסקריפט).
+3. Project -> Files: העלו את כל 21 הקבצים מ-`point/knowledge-files/` (אחרי הרצת הסקריפט).
 4. Smoke test: פתחו צ'אט חדש. Point אמור להציג את עצמו בעברית. נסו: *"אני רוצה לבנות מצגת על X"*. הוא אמור להתחיל אליציטציה.
 
 ## התקנת POWER

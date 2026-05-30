@@ -1,6 +1,6 @@
 {
   "name": "point-to-power",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Two-agent chain for content-first presentation building: Point structures the message, POWER builds the deck.",
   "author": {
     "name": "Benefits by Ben Akiva"

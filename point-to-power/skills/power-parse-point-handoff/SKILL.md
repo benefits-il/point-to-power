@@ -18,7 +18,7 @@ allowed-tools:
 
 - **source** (enum: `filesystem` | `paste`). קובע מאיפה מגיע הטקסט.
 - **payload** (string או path):
-  - אם source=filesystem -> path לקובץ markdown תחת `build\handoff-runtime\` (אופציונלי; אם חסר, קרא את `../../shared/filesystem-conventions.md` ובחר את הקובץ האחרון).
+  - אם source=filesystem -> path לקובץ markdown תחת `build\<slug>\handoff\` (אופציונלי; אם חסר, קרא את `../../shared/filesystem-conventions.md` ובחר את קובץ ה-handoff האחרון מכל תיקיות הפרויקט). אפשר גם להעביר project slug, ואז נבחר ה-handoff האחרון תחת `build\<slug>\handoff\`.
   - אם source=paste -> מחרוזת ה-markdown הגולמית שהלומד הדביק כהודעה ראשונה.
 
 ## Outputs
@@ -68,7 +68,7 @@ parse_errors:                    # רשימה. ריקה אם הניתוח עבר
 
 1. *טען טקסט.*
    - אם source=filesystem ויש path -> קרא את הקובץ ב-UTF-8.
-   - אם source=filesystem ואין path -> קרא את `../../shared/filesystem-conventions.md` להבנת הקריטריון של "הקובץ האחרון", סרוק את הספרייה ובחר.
+   - אם source=filesystem ואין path -> קרא את `../../shared/filesystem-conventions.md` להבנת הקריטריון של "קובץ ה-handoff האחרון", סרוק את תיקיות ה-`build\<slug>\handoff\` ובחר.
    - אם source=paste -> השתמש במחרוזת ישירות.
 2. *סור קוד-פנס חיצוני אחד.* לפי החוזה Section 8, סבול עד fence חיצוני אחד מסוג ` ``` `, ` ```markdown `, או ` ```md `. השאר fence-ים פנימיים בתוך ערכי שדות כפי שהם. אם יש fence חיצוני מסוג אחר (לדוגמה: ` ```python `) -> רשום parse_error קוד `header-malformed` והמשך כאילו אין fence (הוולידטור יתפוס את הכשל).
 3. *גזור white-space מהתחלת הטקסט.* שורות ריקות לפני הכותרת מותרות.
@@ -118,7 +118,7 @@ parse_errors:                    # רשימה. ריקה אם הניתוח עבר
 
 - קובץ ב-encoding לא UTF-8 -> נסה fallback ל-cp1255 (Windows Hebrew). אם נכשל, החזר AST ריק עם parse_error קוד `encoding-error`.
 - קובץ גדול מאוד (מעל 5MB) -> חתוך והחזר parse_error `file-too-large`. handoff סביר הוא עד 50K.
-- ספריית `build\handoff-runtime\` לא קיימת ו-source=filesystem בלי path -> החזר AST ריק עם parse_error `no-handoff-files` ובקש מהמשתמש להדביק במקום זאת.
+- אין אף תיקיית `build\<slug>\handoff\` ו-source=filesystem בלי path -> החזר AST ריק עם parse_error `no-handoff-files` ובקש מהמשתמש להדביק במקום זאת.
 - regex של slide heading לא תופס -> רשום `no-slides`.
 
 ## Test fixtures

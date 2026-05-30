@@ -27,6 +27,7 @@ allowed-tools:
   - שדות חובה: `target` (enum: html | powerpoint | ask), `audience` (טקסט עברי חופשי), `genre` (enum), `duration_minutes` (int 1-240), `output_type` (enum), `speaker_notes` (on | off), `language` (he | en | mixed).
   - שדות אופציונליים: `style_preference` (טקסט חופשי), `generated_at` (ISO 8601), `session_id` (slug אנגלי).
 - **content_units** (ordered list): רשימת יחידות תוכן גולמיות בסדר זמני התחלתי. כל יחידה מכילה `raw_text` (טקסט עברי) ו-`tentative_position` (int).
+- **project_slug** (string, ASCII lowercase, מקפים, עד 40 תווים): שם תיקיית הפרויקט `build/<slug>/`. עדיפות: session_id > label שהלומד נתן > `untitled`. נקבע מוקדם כי כל השלבים הבאים (Phase 3 כותב ל-`prompts/`, Phase 6 ל-`handoff/`) צריכים אותו. ראה `../../shared/filesystem-conventions.md` לכללי ה-slug.
 
 ## Process
 
@@ -41,7 +42,8 @@ allowed-tools:
 9. בעת איסוף תוכן, שמור את הסדר שבו הלומד הזכיר את הנושאים כ-`tentative_position`. הסקיל הבא (structure-content-to-slides) רשאי לסדר מחדש, אבל הסדר הראשוני שלך הוא הנחת מוצא חשובה.
 10. לולאה פנימית: המשך לשאול עד שכל שבעת שדות החובה ב-Meta הם non-empty ויש לפחות יחידת תוכן אחת. אל תקרא Done לפני זה.
 11. אל תאמת ערכי enum מול האניומים בעצמך, זו אחריות של הסקיל `produce-handoff-md` עם הגייט הפנימי שלו. אתה רק אוסף.
-12. החזר את ה-`intake_record` המלא כפלט. אל תכתוב לדיסק.
+12. **קבע `project_slug`.** אם הלומד נתן session_id או שם פרויקט, נרמל אותו (לפי `../../shared/filesystem-conventions.md`). אחרת, שאל שאלה קצרה אחת ("איך לקרוא לתיקיית הפרויקט? משהו קצר באנגלית"), ונרמל את התשובה. אם הלומד לא נותן, השתמש ב-`untitled`. ה-slug נקבע פעם אחת ומלווה את כל הסשן.
+13. החזר את ה-`intake_record` המלא ואת `project_slug` כפלט. אל תכתוב לדיסק (יצירת התיקיות קורית כשהסקילים הבאים כותבים אליהן).
 
 ## Edge cases
 

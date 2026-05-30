@@ -12,7 +12,9 @@ allowed-tools:
 
 ## Purpose
 
-מעבד את Visual Queue של ה-AST ב-batch, כדי לשמור עקביות חזותית בין שקופיות. כל פלייסהולדר הופך לפרומפט image-generation מוכן עם תיוג של ה-tools המתאימים (Gemini, GPT-Image, Recraft). הסקיל לא בוחר את הסגנון, הוא מקבל אותו כקלט וצובע איתו את כל הפרומפטים.
+מעבד את Visual Queue של ה-AST ב-batch, כדי לשמור עקביות חזותית בין שקופיות. כל פלייסהולדר הופך לפרומפט image-generation **עצמאי, מוכן-להעתקה, ומלא-מפרט** עם תיוג של ה-tools המתאימים (Gemini, GPT-Image, Recraft). הסקיל לא בוחר את הסגנון, הוא מקבל אותו כקלט וצובע איתו את כל הפרומפטים.
+
+> **רף איכות (חובה).** כל פרומפט הוא בלוק שלם בפני עצמו, בלי הקדמה-לקריאה-קודם ובלי חלקים-למיזוג. הלומד מעתיק בלוק אחד ומקבל תמונה. ראה "Prompt quality rules" לפני שמרכיבים.
 
 ## Inputs
 
@@ -46,16 +48,26 @@ image_prompts:
    - motion language (static, micro-motion, animated).
    - composition keywords (flat, editorial, brutal, organic, etc.).
 3. קרא את `../../references/R1-05-visuals.md` כדי לוודא שכל פרומפט עומד בכללי PSE (Picture Superiority Effect), Dual-Coding, ו-Coherence. בלי דקורציה ריקה.
-4. עבור כל פריט ב-visual_queue:
+4. עבור כל פריט ב-visual_queue, הרכב פרומפט image-generation **עצמאי ומלא** עם כל הרכיבים הבאים, בסדר הזה, בבלוק אחד:
    - נתח את ה-placeholder. אם זה גרף או נתון -> קרא גם את `../../references/R1-03-data-viz.md` להחלטת סוג הגרף.
-   - הרכב פרומפט image-generation:
-     - *subject:* מה הוויזואל מתאר. הפוך את ה-placeholder ל-subject ספציפי, לא תיאור כללי.
-     - *style:* משוך מ-style_anchors. לדוגמה: `flat editorial illustration, generous whitespace, single accent color #2563EB on a near-black and white palette`.
-     - *mood:* מתבסס על tone מ-style_record (calm, urgent, playful).
-     - *composition:* מבוסס על image_placement מ-write-per-slide-layout אם זמין; אחרת ברירת מחדל.
-     - *technical:* aspect ratio, רזולוציה. ל-HTML deck ברירת מחדל 16:9 (1920x1080). ל-PPT 16:9 (1280x720). ל-hero/full-bleed: 21:9.
+   - *subject:* תיאור סצנה קונקרטי. הפוך את ה-placeholder ל-subject ספציפי (מי/מה/איפה), לא מילות-מצב-רוח. לא "תמונה מגניבה של X", אלא "X עומד מול Y, Z מסומן ב...".
+   - *material / render style:* מה החומר והרינדור. `flat vector illustration` / `photoreal photograph` / `minimalist UI mock` / `diagram`. משוך מ-style_anchors.
+   - *lighting:* גם לאיור (`flat, no cast shadows`) וגם לצילום (`natural daylight from the left, soft shadows`). תמיד ציין, אל תשאיר למודל לנחש.
+   - *background:* מפורש (`solid white background` / `near-black #0F1419` / `blurred wooden desk`). לא להשאיר ריק.
+   - *exact colors:* ה-hex המדויקים מ-style_anchors.palette, מילולית בתוך הפרומפט (לדוגמה `single accent #2563EB on white #FFFFFF and near-black #0F1419`).
+   - *composition:* מבוסס על image_placement מ-write-per-slide-layout אם זמין; אחרת ברירת מחדל (`subject left-of-center, generous whitespace`).
+   - *aspect ratio + resolution:* ל-HTML deck ברירת מחדל 16:9 (1920x1080). ל-PPT 16:9 (1280x720). ל-hero/full-bleed 21:9 (2520x1080).
+   - *negatives:* שורת `Avoid:` מפורשת בסוף כל פרומפט. כברירת מחדל כלול: `no hands or fingers, no text artifacts, no gradients unless specified, no decorative clutter, no watermark, no extra limbs`. הוסף negatives ספציפיים לסצנה לפי הצורך.
    - אם ה-placeholder מציין `וידאו` -> סמן בפרומפט שזה still keyframe להחלפה ידנית בווידאו (שום tool כאן לא מייצר וידאו).
    - אם ה-placeholder מציין `צילום מסך` -> סמן בפרומפט שזה mock-up UI לפי תיאור הסגנון; הלומד יחליף לצילום מסך אמיתי.
+
+### Prompt quality rules (Problem F, חובה)
+
+- **בלי ידיים.** אל תכניס ידיים, אצבעות, או דמויות שמבצעות פעולה ביד, אלא אם הלומד ביקש מפורשות. שיעור כשל גבוה, off-brand. במקום "יד מעלה קובץ" -> "מסך שמציג את הקובץ שהועלה".
+- **בלי בקשות בלתי-אפשריות פיזית.** אובייקט אחד לא יכול להיות בשלושה מצבים בו-זמנית. אם צריך להראות רצף/טרנספורמציה -> פצל ללוחות נפרדים (`three side-by-side panels: before, during, after`) או בחר רגע אחד.
+- **בלי מילות-מצב-רוח מעורפלות ובלי שיפוטי ערך.** המודל לא יכול לפעול לפי "מגניב", "מודרני", "לא cringey", "יפה". כל mood חייב להיות נצפה (`calm: soft daylight, muted palette, no sharp contrast`).
+- **בלי טקסט בתוך התמונה אלא אם נחוץ.** אם נחוץ (כיתוב, FAIL, לוגו), ציין את הטקסט המדויק ושים `keep text minimal and legible`; הזהר שטקסט בעברית בתוך תמונה לא אמין בכל tool.
+- **עצמאי ומוכן-להעתקה.** כל בלוק שלם בפני עצמו: subject, material/render, lighting, background, hex, composition, aspect ratio, ו-Avoid. בלי "אנקור לקרוא קודם", בלי חלקים שהלומד צריך למזג.
 5. דרג את ה-target_tools לכל פרומפט:
    - *gemini (Imagen)*, חזק ל-photorealistic, mid-range edits, captions accurate.
    - *gpt-image*, חזק ל-illustration עם טקסט בתוך התמונה, gist-style, abstract.
