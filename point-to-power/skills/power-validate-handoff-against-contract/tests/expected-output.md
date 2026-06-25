@@ -19,7 +19,7 @@ rejections:
     hebrew_message: "שדה חובה חסר במקטע Meta: genre. הוסף שורה: - **genre:** <ערך>"
     location: meta.genre
   - code: meta-enum-invalid
-    hebrew_message: "ערך לא חוקי לשדה target: 'HTML'. הערכים המותרים: html, powerpoint, ask."
+    hebrew_message: "ערך לא חוקי לשדה target: 'HTML'. הערכים המותרים: html, powerpoint, slides, ask."
     location: meta.target
   - code: duration-invalid
     hebrew_message: "שדה duration_minutes חייב להיות מספר שלם בין 1 ל-240. נמצא: '12.5'."
@@ -33,6 +33,6 @@ Notes for human reviewer:
 
 - The three rejections are emitted in a single pass , not iteratively, one at a time. The learner sees all three at once to fix in one round-trip.
 - `genre` missing triggers rule 4. The substitution shows `genre` (the missing field key).
-- `target: HTML` triggers rule 5. Substitutions: `{field}=target`, `{value}=HTML`, `{allowed}=html, powerpoint, ask`.
+- `target: HTML` triggers rule 5. Substitutions: `{field}=target`, `{value}=HTML`, `{allowed}=html, powerpoint, slides, ask`.
 - `duration_minutes: 12.5` triggers rule 6. Substitution: `{value}=12.5` (raw string as it appeared).
 - No warnings because no emojis or em-dashes in any field value.

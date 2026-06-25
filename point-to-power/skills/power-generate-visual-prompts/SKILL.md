@@ -56,7 +56,7 @@ image_prompts:
    - *background:* מפורש (`solid white background` / `near-black #0F1419` / `blurred wooden desk`). לא להשאיר ריק.
    - *exact colors:* ה-hex המדויקים מ-style_anchors.palette, מילולית בתוך הפרומפט (לדוגמה `single accent #2563EB on white #FFFFFF and near-black #0F1419`).
    - *composition:* מבוסס על image_placement מ-write-per-slide-layout אם זמין; אחרת ברירת מחדל (`subject left-of-center, generous whitespace`).
-   - *aspect ratio + resolution:* ל-HTML deck ברירת מחדל 16:9 (1920x1080). ל-PPT 16:9 (1280x720). ל-hero/full-bleed 21:9 (2520x1080).
+   - *aspect ratio + resolution:* ל-HTML deck ברירת מחדל 16:9 (1920x1080). ל-PPT 16:9 (1280x720). ל-Google Slides deck 16:9 (1920x1080, זהה ל-HTML, כי Slides הוא web-rendered). ל-hero/full-bleed 21:9 (2520x1080).
    - *negatives:* שורת `Avoid:` מפורשת בסוף כל פרומפט. כברירת מחדל כלול: `no hands or fingers, no text artifacts, no gradients unless specified, no decorative clutter, no watermark, no extra limbs`. הוסף negatives ספציפיים לסצנה לפי הצורך.
    - אם ה-placeholder מציין `וידאו` -> סמן בפרומפט שזה still keyframe להחלפה ידנית בווידאו (שום tool כאן לא מייצר וידאו).
    - אם ה-placeholder מציין `צילום מסך` -> סמן בפרומפט שזה mock-up UI לפי תיאור הסגנון; הלומד יחליף לצילום מסך אמיתי.

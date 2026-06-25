@@ -292,7 +292,7 @@ Since Claude.ai Projects has no separate skill files, all skill instructions liv
 *Outputs.*
 
 - **intake_record**: `meta` (7 חובה + 3 אופציונליים, מתואם ל-Section 2 של החוזה) + `content_units` (רשימה מסודרת עם `raw_text` ו-`tentative_position`).
-  - שדות חובה: `target` (html | powerpoint | ask), `audience`, `genre`, `duration_minutes` (1-240), `output_type`, `speaker_notes` (on | off), `language` (he | en | mixed).
+  - שדות חובה: `target` (html | powerpoint | slides | ask), `audience`, `genre`, `duration_minutes` (1-240), `output_type`, `speaker_notes` (on | off), `language` (he | en | mixed).
   - אופציונליים: `style_preference`, `generated_at`, `session_id`.
 - **project_slug** (ASCII lowercase, מקפים, עד 40): עדיפות session_id > label של הלומד > `untitled`.
 
@@ -305,7 +305,7 @@ Since Claude.ai Projects has no separate skill files, all skill instructions liv
 5. שאל שאלות בעברית, קצרות, אחת או שתיים בכל הודעה.
 6. בעת `genre`, השתמש בקטגוריות מ-`R1-08-decision-tree.md` ו-`R1-addon-A-decision-sheet.md`.
 7. בעת `audience`, הסתמך על טקסונומיית הקהל ב-R1 ch08.
-8. בעת `target`, אם לא בטוח, הצב `ask`.
+8. בעת `target`, יש שלוש אפשרויות: `html` (Claude), `powerpoint` (Claude-in-PowerPoint), `slides` (Google Slides דרך Gemini, כשאין PowerPoint או רוצים שיתוף בענן). אם הלומד יודע, מלא; אם לא בטוח, הצב `ask`.
 9. שמור את סדר הנושאים כ-`tentative_position`.
 10. לולאה פנימית עד 7/7 שדות חובה + content_unit אחד.
 11. אל תאמת enum בעצמך, זו אחריות `produce-handoff-md`.

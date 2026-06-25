@@ -24,7 +24,7 @@ allowed-tools:
 מבנה נתונים יחיד בשם `intake_record` עם שני מקטעים:
 
 - **meta** (object): שבעה שדות חובה + שלושה אופציונליים, מתואמים בדיוק ל-Section 2 של החוזה.
-  - שדות חובה: `target` (enum: html | powerpoint | ask), `audience` (טקסט עברי חופשי), `genre` (enum), `duration_minutes` (int 1-240), `output_type` (enum), `speaker_notes` (on | off), `language` (he | en | mixed).
+  - שדות חובה: `target` (enum: html | powerpoint | slides | ask), `audience` (טקסט עברי חופשי), `genre` (enum), `duration_minutes` (int 1-240), `output_type` (enum), `speaker_notes` (on | off), `language` (he | en | mixed).
   - שדות אופציונליים: `style_preference` (טקסט חופשי), `generated_at` (ISO 8601), `session_id` (slug אנגלי).
 - **content_units** (ordered list): רשימת יחידות תוכן גולמיות בסדר זמני התחלתי. כל יחידה מכילה `raw_text` (טקסט עברי) ו-`tentative_position` (int).
 - **project_slug** (string, ASCII lowercase, מקפים, עד 40 תווים): שם תיקיית הפרויקט `build/<slug>/`. עדיפות: session_id > label שהלומד נתן > `untitled`. נקבע מוקדם כי כל השלבים הבאים (Phase 3 כותב ל-`prompts/`, Phase 6 ל-`handoff/`) צריכים אותו. ראה `../../shared/filesystem-conventions.md` לכללי ה-slug.
@@ -38,7 +38,7 @@ allowed-tools:
 5. שאל שאלות בעברית, קצרות וישירות. שאלה אחת או שתיים בכל הודעה, לא שאלון של עשר שאלות בבת אחת.
 6. בעת השאלה על `genre`, השתמש בקטגוריות מ-`../../references/R1-08-decision-tree.md` ובמיפוי המהיר מ-`../../references/R1-addon-A-decision-sheet.md` כדי להציע אפשרויות בשפת הלומד ("מצגת מכירה ללקוח", "הרצאה כנסית", "ברייפינג פנימי") במקום לבקש ממנו לבחור את ה-enum המדויק. תרגם אתה לעברית-לאנגלית בעת מילוי.
 7. בעת השאלה על `audience`, הסתמך על טקסונומיית הקהל ב-R1 ch08 כדי לכוון את הלומד לתשובה מועילה (גודל קהל, רמת מומחיות, הקשר).
-8. בעת השאלה על `target`, אם הלומד לא בטוח, אל תכריח. הצב את הערך `ask` ותן ל-POWER לשאול בעת הבנייה. זה חלק תקף מהחוזה.
+8. בעת השאלה על `target`, יש שלוש אפשרויות פלט: `html` (אתר יחיד דרך Claude הרגיל), `powerpoint` (קובץ דרך Claude-in-PowerPoint), ו-`slides` (Google Slides דרך Gemini, מתאים כשאין PowerPoint או כשרוצים שיתוף בענן ועבודה משותפת). אם הלומד יודע מה הוא רוצה, מלא את הערך. אם לא בטוח, אל תכריח: הצב `ask` ותן ל-POWER לשאול ולהציע את שלוש האפשרויות בעת הבנייה. זה חלק תקף מהחוזה.
 9. בעת איסוף תוכן, שמור את הסדר שבו הלומד הזכיר את הנושאים כ-`tentative_position`. הסקיל הבא (structure-content-to-slides) רשאי לסדר מחדש, אבל הסדר הראשוני שלך הוא הנחת מוצא חשובה.
 10. לולאה פנימית: המשך לשאול עד שכל שבעת שדות החובה ב-Meta הם non-empty ויש לפחות יחידת תוכן אחת. אל תקרא Done לפני זה.
 11. אל תאמת ערכי enum מול האניומים בעצמך, זו אחריות של הסקיל `produce-handoff-md` עם הגייט הפנימי שלו. אתה רק אוסף.

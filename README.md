@@ -70,10 +70,11 @@ point-to-power/                 (repo root = plugin marketplace)
       power-generate-visual-prompts/
       power-generate-ppt-prompt/
       power-generate-html-prompt/
+      power-generate-slides-prompt/
     commands/
       point.md
       power.md
-    references/       (R1, R2, R3, R4 knowledge base + handoff-contract + example-handoff)
+    references/       (R1, R2, R3, R4, R5 knowledge base + handoff-contract + example-handoff)
     shared/           (validation-rules.md, filesystem-conventions.md)
   assets/             (landing page assets)
   index.html          (GitHub Pages landing)

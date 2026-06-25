@@ -17,7 +17,7 @@ allowed-tools:
 ## Inputs
 
 - **ast** (כל ה-AST: meta + slides). הסקיל מחלץ ממנו signals.
-- **target** מ-`detect-target-html-or-ppt`. משפיע על Pairing Rules (HTML vs PPT).
+- **target** מ-`detect-target-html-or-ppt`. משפיע על Pairing Rules. `slides` מתנהג כמו `html` ב-pairing: Google Slides תומך ב-Google Fonts, ולכן זמינות הפונטים והפלטות זהה ל-HTML.
 
 ## Outputs
 
@@ -58,14 +58,14 @@ warnings:
    - `industry`, אם נדחק (לדוגמה: fintech, design, healthcare). אחרת `general`.
    - `novelty`, האם הקהל יודע על הנושא? `expected`, `novel`, `disruptive`.
    - `brand_constraint`, האם יש style_preference מפורש? אם כן, השתמש בו כ-weight גבוה. אחרת `none`.
-   - `format`, מתוך target + output_type: `html-deck`, `html-slidedoc`, `ppt-deck`, `ppt-slidedoc`, `teleprompter`.
+   - `format`, מתוך target + output_type: `html-deck`, `html-slidedoc`, `ppt-deck`, `ppt-slidedoc`, `slides-deck`, `slides-slidedoc`, `teleprompter`.
 3. *שלב 2 , Run Decision Tree (R3 stage-3-output.md, line 419).* הזן את ה-signals וקבל מועמד style ראשוני. שמור את הענפים שעברת בהם.
 4. *שלב 3 , Internal clarifying loop.* אם הוצאת מהעץ 2+ tensions שלא הוכרעו (לדוגמה: audience מתאים לסגנון A אבל tone מתאים לסגנון B):
    - איטרציה 1: הוסף משקל ל-style_preference אם זמין; אם לא, הוסף משקל ל-audience.
    - איטרציה 2: הוסף משקל ל-format.
    - אם אחרי 2 איטרציות עדיין נשארו 2+ tensions -> עבור ל-Mood Map.
 5. *שלב 4 , Mood Clustering Map fallback (R3 line 554).* ה-Map ממפה רגש כללי (calm, energetic, sharp, soft, etc.) לסגנונות. אם השלב 3 נכשל, השתמש ב-Map: מיקום ה-signals על שתי צירים (חמימות-קור, פשטות-עושר) -> אשכול -> סגנון.
-6. *שלב 5 , Pairing Rules (R3 line 621).* קח את ה-style שנבחר ויישם את Pairing Rules ל-target הנכון (HTML vs PPT). ה-rules נועלים:
+6. *שלב 5 , Pairing Rules (R3 line 621).* קח את ה-style שנבחר ויישם את Pairing Rules ל-target הנכון (HTML, PPT, או slides). `slides` משתמש בכללי ה-HTML, כי Google Slides תומך ב-Google Fonts. ה-rules נועלים:
    - fonts (heading + body), כולל fallback chain.
    - palette (primary, accent, background, text), כולל בדיקת WCAG AA contrast.
    - spacing (base unit + rhythm).

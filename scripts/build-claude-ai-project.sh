@@ -4,7 +4,7 @@
 #
 # Output (gitignored):
 #   claude-ai-project/point/knowledge-files/   (21 files)
-#   claude-ai-project/power/knowledge-files/   (17 files)
+#   claude-ai-project/power/knowledge-files/   (18 files)
 
 set -euo pipefail
 
@@ -43,7 +43,7 @@ POINT_FILES=(
   example-handoff.md
 )
 
-# POWER gets R3, R4 (all 8), 4 R1 overlap, handoff-contract, example-handoff, plus 2 shared.
+# POWER gets R3, R4 (all 8), R5, 4 R1 overlap, handoff-contract, example-handoff, plus 2 shared.
 POWER_FILES=(
   R1-01-typography.md
   R1-02-density.md
@@ -58,6 +58,7 @@ POWER_FILES=(
   R4-SA6-ch8.md
   R4-siblings-stale-watch.md
   R4-siblings-templates.md
+  R5-gemini-slides.md
   handoff-contract.md
   example-handoff.md
 )
@@ -89,7 +90,7 @@ POWER_COUNT=$(ls "$POWER_OUT" | wc -l)
 echo
 echo "Done."
 echo "  Point: $POINT_COUNT files (expected 21)"
-echo "  POWER: $POWER_COUNT files (expected 17)"
+echo "  POWER: $POWER_COUNT files (expected 18)"
 echo
 echo "Next: upload these folders to your Claude.ai Projects."
 echo "After uploading, you may delete them - they regenerate any time you run this script."

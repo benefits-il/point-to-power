@@ -34,7 +34,7 @@ The meta block starts with the H2 heading `## Meta` and ends at the next H2 head
 
 | # | Field | Type | Required | Allowed values | Validation |
 |---|---|---|---|---|---|
-| 1 | `target` | enum | Required | `html` \| `powerpoint` \| `ask` | Lowercase only. `ask` means Point could not determine the target; POWER will ask the learner before building. |
+| 1 | `target` | enum | Required | `html` \| `powerpoint` \| `slides` \| `ask` | Lowercase only. `html` = single-file deck via regular Claude. `powerpoint` = Claude-in-PowerPoint add-in. `slides` = Google Slides via Gemini (Gemini Canvas builds the deck from the handoff, learner exports to Google Slides). `ask` means Point could not determine the target; POWER will ask the learner before building. |
 | 2 | `audience` | free text (he) | Required | Free text, max 240 chars | Pointer guideline: R1 ch08 audience taxonomy. POWER treats this as soft signal for the Style Decision Tree. |
 | 3 | `genre` | enum | Required | `pitch` \| `keynote` \| `ted` \| `lecture` \| `sales` \| `briefing` \| `workshop` \| `demo` | Lowercase only. Drives genre-specific rules in both Point's emit logic and POWER's style routing. |
 | 4 | `duration_minutes` | integer | Required | 1..240 | Integer only, no decimals, no units suffix. POWER uses this for slide pacing checks. |

@@ -1,6 +1,6 @@
 ---
 name: power-write-per-slide-layout
-description: Activate after select-style , emit per-slide layout directives (grid, hierarchy, image placement, motion, RTL notes) consistent with the selected style; vocabulary diverges per target (PPT slots vs CSS grid).
+description: Activate after select-style , emit per-slide layout directives (grid, hierarchy, image placement, motion, RTL notes) consistent with the selected style; vocabulary diverges per target (PPT slots vs CSS grid; slides reuses the CSS grid vocabulary).
 version: 1.0.0
 user-invocable: false
 disable-model-invocation: false
@@ -12,13 +12,13 @@ allowed-tools:
 
 ## Purpose
 
-עבור כל שקופית, מייצר רשומת layout שמתארת איך השקופית בנויה: רשת, היררכיה ויזואלית, מיקום תמונה, motion, ו-RTL notes. ה-shape של הרשומה זהה לכל target, אבל אוצר המילים בפנים שונה: PPT משתמש ב-slot vocabulary של PowerPoint, HTML משתמש ב-CSS grid vocabulary.
+עבור כל שקופית, מייצר רשומת layout שמתארת איך השקופית בנויה: רשת, היררכיה ויזואלית, מיקום תמונה, motion, ו-RTL notes. ה-shape של הרשומה זהה לכל target, אבל אוצר המילים בפנים שונה: PPT משתמש ב-slot vocabulary של PowerPoint, HTML משתמש ב-CSS grid vocabulary, ו-slides (Google Slides דרך Gemini) משתמש באותו אוצר מילים סמנטי כמו HTML, כי Gemini קורא תיאור layout בשפה טבעית.
 
 ## Inputs
 
 - **ast.slides** (רשימה מהוולידטור).
 - **style_record** מ-`select-style`.
-- **target** (`html` | `powerpoint`), קובע אוצר המילים בפנים.
+- **target** (`html` | `powerpoint` | `slides`), קובע אוצר המילים בפנים. `slides` משתמש באותו אוצר מילים סמנטי כמו `html`.
 
 ## Outputs
 
@@ -27,6 +27,7 @@ layouts:
   - slide_number: 1
     grid: ...           # PPT: "title-only" | "title-content" | "two-content" | "comparison" | "title-image" | "section-header" | "blank"
                         # HTML: "1col" | "2col" | "3col" | "hero" | "split-50-50" | "split-60-40" | "stack"
+                        # slides: same vocabulary as HTML
     hierarchy:
       - element: title
         size: ...        # PPT: "title-44pt" / HTML: "text-4xl"
@@ -68,7 +69,7 @@ layouts:
      - אחרת -> note כללי: `כל הטקסט מיושר ימינה, הספרות LTR.`
      - אם language=en -> השאר null.
 6. עבור target=`powerpoint`, ודא ש-grid הוא אחד מ-7 ה-slots הסטנדרטיים של PowerPoint. אל תמציא slots חדשים, Claude-in-PowerPoint add-in מצפה ל-vocabulary המוגדר.
-7. עבור target=`html`, ודא ש-grid הוא vocabulary CSS Grid או Flexbox מוכר. השתמש בשמות תיאוריים שיגיעו ל-`generate-html-prompt` כסיגנל ברור.
+7. עבור target=`html` או target=`slides`, ודא ש-grid הוא vocabulary CSS Grid או Flexbox מוכר. השתמש בשמות תיאוריים סמנטיים. עבור html הם מגיעים ל-`generate-html-prompt`, ועבור slides ל-`generate-slides-prompt`, ובשני המקרים אוצר המילים זהה.
 8. שמור עקביות בין שקופיות. אם כל הסגנון הוא minimal ו-style_record מציין `motion: none`, אל תוסיף fade-in לשקופיות בודדות.
 9. החזר את ה-list של layout records.
 
@@ -83,7 +84,7 @@ layouts:
 
 ## Failure modes
 
-- target לא ידוע (לא html ולא powerpoint) -> זה לא אמור לקרות אחרי detect-target. החזר שגיאה.
+- target לא ידוע (לא html, powerpoint, או slides) -> זה לא אמור לקרות אחרי detect-target. החזר שגיאה.
 - style_record חסר locked.spacing -> השלם משדות ברירת מחדל של 8px base unit, סמן warning.
 - slide בלי visual_placeholder field (parse error) -> זה היה אמור להיחסם ב-validator. אם הגעת לכאן, ברירת מחדל ל-`none`.
 

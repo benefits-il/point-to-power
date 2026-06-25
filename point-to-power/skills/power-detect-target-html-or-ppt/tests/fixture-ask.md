@@ -17,7 +17,10 @@ Skill issues the Hebrew prompt:
 2) קובץ PowerPoint שאפשר לערוך ב-Microsoft PowerPoint.
    מתאים אם תרצה להמשיך לערוך, להדפיס, או להציג מתוך PowerPoint עצמו.
 
-ענה 1 או 2, או כתוב html / powerpoint.
+3) מצגת Google Slides שנבנית דרך Gemini.
+   מתאים אם אין לך PowerPoint, או אם תרצה שיתוף בענן ועבודה משותפת על המצגת.
+
+ענה 1, 2 או 3, או כתוב html / powerpoint / slides.
 ```
 
 Turn 2 , learner reply: `2`

@@ -54,7 +54,7 @@ Rejection rules block consumption. The warning rule does not block , it surfaces
 - **hebrew_message:** `ערך לא חוקי לשדה {field}: '{value}'. הערכים המותרים: {allowed}.`
 - **substitutions:** `{field}`, `{value}` (raw, lowercased if applicable), `{allowed}` (comma-separated list).
 - **enum_table:**
-  - `target` -> `html, powerpoint, ask`
+  - `target` -> `html, powerpoint, slides, ask`
   - `genre` -> `pitch, keynote, ted, lecture, sales, briefing, workshop, demo`
   - `output_type` -> `presentation, teleprompter, slidedoc`
   - `speaker_notes` -> `on, off`
