@@ -69,6 +69,12 @@ warnings:
    - fonts (heading + body), כולל fallback chain.
    - palette (primary, accent, background, text), כולל בדיקת WCAG AA contrast.
    - spacing (base unit + rhythm).
+
+   *(W-G4) נעילת גופן מפורשת.* אם `ast.meta.style_preference` (או הלומד ישירות) נוקב בשם גופן ספציפי (למשל "Heebo", "Assistant", "Frank Ruhl") -> הגופן הזה *נועל* את ה-heading ו/או ה-body וגובר על ברירת המחדל של ה-brand-sheet / Pairing Rules. אל תבלע את הבקשה לתוך fallback chain. סדר הקדימות: בקשת גופן מפורשת של הלומד > brand sheet > ברירת מחדל של ה-pairing.
+   - אם הלומד נקב גופן ל-heading בלבד -> נעל אותו ל-heading, השאר את ה-body לפי ה-pairing.
+   - אם הגופן שנתבקש לא זמין (לא ב-Google Fonts ל-HTML/slides, או לא מותקן ל-PPT) -> הוסף warning `font-not-available`, השתמש ב-fallback מפורש (גופן קרוב שכן זמין), וציין מפורשות מה הוחלף. אף פעם אל תשמיט את הבקשה בשקט.
+
+   *רשומת סגנון שלמה (לטובת רף האיכות W-G3 של ה-emitter).* הרשומה הנעולה חייבת לצאת *שלמה* כדי שה-emitter במורד הזרם יוכל לכתוב פרומפט עשיר ומדויק: fonts עם fallback chain מלא (heading + body), palette עם ערכי hex מדויקים ל-primary, accent, background ו-text, ו-spacing עם base unit + rhythm. אל תחזיר רשומה חלקית (למשל hex חסר או fallback ריק); אם חסר ערך, השלם אותו לפי ה-pairing לפני ההחזרה.
 7. *שלב 6 , בחר alternative ו-wildcard:*
    - *alternative:* סגנון נוסף מתוך אותו אשכול ב-Master Style Table (R3 line 576). תן ללומד אופציה נוספת קרובה.
    - *wildcard:* סגנון נועז יותר, מתוך appendix או מתוך אשכול רחוק יותר. נימוק קצר.

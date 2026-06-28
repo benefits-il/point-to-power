@@ -3,7 +3,13 @@
 **Snapshot:** May 2026
 **Purpose:** המקור הסמכותי שממנו `point-emit-notebooklm-kit` מרכיב את ערכת ה-NotebookLM שנדחפת למשתמש מיד אחרי ה-intake. הקובץ עונה על שלוש שאלות: מה כל artifact מפיק ומתי, איך כותבים פרומפט טוב, ואיזו ערכה להרכיב לכל סוג מצגת. R2 הקיים (ch11/ch12/addons) נשאר תקף ומשלים את הקובץ הזה; כאן מרוכז מה ש-Point צריך כדי לפלוט ערכה שלמה בפעימה אחת.
 
-> **עיקרון מנחה:** NotebookLM הוא מנוע מחקר והעמקה, לא מדפסת לתוצר סופי. הערכה גורמת לתוכן האמיתי לזרום חזרה אל Point (competitor comparison, המדע, הקשר שוק) במקום להישאר ניחושים. כל פרומפט בערכה מוכן-להעתקה ומתויג במטרתו.
+> **עיקרון מנחה:** NotebookLM הוא מנוע מחקר והעמקה, לא מדפסת לתוצר סופי. הערכה גורמת לתוכן האמיתי לזרום חזרה אל Point (competitor comparison, המדע, הקשר שוק) במקום להישאר ניחושים. כל פרומפט בערכה מוכן-להעתקה, נקי (רק הפרומפט, בלי רעש מסביבו), ומתויג במטרתו.
+
+> **מטרה כפולה של הערכה (PointToPower תמיד בונה מצגת):** המחברת היחידה משרתת שני דברים בו-זמנית. (א) **לעשות סדר בתוכן** ולהפיק כמה מסמכי BRIEF שהמשתמש מוריד ועובד איתם בתור תוכן, ושמזינים גם את חוברת-המנחה וגם את תוכן-השקופיות. (ב) **לייצר ויזואלים להשראה** בסגנון-העיצוב של המותג: video, 2-3 infographics, ו-2-3 מצגות-דוגמה, כדי לתת למשתמש רעיונות מה הוא רוצה שיהיה במצגת. המשתמש מחזיר את מה שאהב אל Point, ו-Point עוזר לבנות מזה.
+
+> **כלל-ברזל , תוצרים ויזואליים בלבד למצגת:** כיוון שהיעד תמיד מצגת, הערכה מפיקה פרומפטים ל-Briefing Docs ולתוצרים ויזואליים (Infographic, Slide Deck, Video) בלבד. **אסור** לפלוט פרומפט ל-Audio Overview (Brief או Deep Dive) או ל-Mind Map , הם לא משרתים בניית מצגת. זו טעות שחזרה בדריירן ונאסרת כאן מפורשות.
+
+> **כלל-ברזל , כל פרומפט ויזואלי עצמאי לחלוטין:** כל פרומפט ויזואלי כולל בתוכו גם את כל המפרט-הוויזואלי הנדרש, מעוגן ב-design system של המותג שעובדים עליו, וגם את התוכן המדויק שצריך להופיע בתוצר. לעולם לא פרומפט ויזואלי גנרי עם "תוסיף כאן את התוכן".
 
 ---
 
@@ -28,8 +34,12 @@
 | **Flashcards** | כרטיסיות spaced-repetition | חזרה פעילה, מינוח | טקסט בלבד; ייצוא CSV תלוי-tier (Tier B) |
 | **Custom Report** | סינתזה מותאמת לפי פרומפט חופשי | literature review, מיפוי סתירות, deep-dive נושאי | חופש מלא דרך הפרומפט; ברירת מחדל ללא תקרה |
 
+**מה רלוונטי לערכת PointToPower (היעד תמיד מצגת):**
+- **כן בערכה:** `Briefing Doc` (כמה מהם, בתור מסמכי BRIEF שמזינים תוכן וחוברת-מנחה), `Infographic` (2-3), `Slide Deck` (2-3 דוגמאות-סגנון), `Video Overview` (אחד, בסגנון-העיצוב). plus `Custom Report` ו-`Study Guide` כשצריך עומק-תוכן.
+- **אסור בערכה:** `Audio Overview - Brief`, `Audio Overview - Deep Dive`, ו-`Mind Map`. הם לא משרתים בניית מצגת. (Quiz/Flashcards/FAQ/Timeline , רק אם הנושא ממש דורש, לא כברירת מחדל.)
+
 **שתי הערות חוצות-artifact:**
-- **עברית באודיו/וידאו:** היכולת נתמכת, האיכות לא אומתה ב-2026. תמיד צרף `rtl-audio-weak` ל-Audio/Video כש-`language` הוא `he` או `mixed`, ובקש מהמשתמש להאזין לדגימה לפני הפצה.
+- **עברית באודיו/וידאו:** ל-Video, האיכות לא אומתה ב-2026. תמיד צרף `rtl-audio-weak` ל-Video כש-`language` הוא `he` או `mixed`, ובקש מהמשתמש לצפות בדגימה לפני הפצה.
 - **אין עריכה ישירה** (חוץ מ-Slide revisions): פלט חלש מתוקן ב-regenerate עם פרומפט מדויק יותר, או export ועריכה חיצונית. 30 שניות בפרומפט חוסכות 10 דקות עריכה.
 
 ---
@@ -57,7 +67,7 @@ PDF, Google Docs/Slides/Sheets, DOCX, PPTX, CSV, TXT/MD, EPUB, Web URL (טקסט
 **לא נתמך:** קובץ MP4 מקומי (המר ל-YouTube URL או תמלל ל-TXT).
 
 ### מסמך המקור שהמשתמש מעלה
-Point מרכיב מהתוכן הגולמי **מסמך מקור נקי אחד** (`prompts/01-source-document.md`) שהמשתמש מעלה ל-NotebookLM כ-source. זה הזרע: כל ה-artifacts וה-chat ימשכו ממנו. המסמך כולל את כוונת המצגת, הקהל, ונקודות התוכן הגולמיות בצורה מסודרת.
+Point מרכיב מהתוכן הגולמי **מסמך מקור נקי אחד** (`01-upload-to-notebooklm/00-source-document.md`) שהמשתמש מעלה ל-NotebookLM כ-source. זה הזרע: כל ה-artifacts וה-chat ימשכו ממנו. המסמך כולל את כוונת המצגת, הקהל, ונקודות התוכן הגולמיות בצורה מסודרת. לצדו, Point מעתיק לאותה תיקייה את **קבצי-המקור הרלוונטיים עצמם** plus `_manifest.md` שמסמן לכל קובץ אם הוא אות (מעלים) או רעש (לא מעלים), כדי שהמשתמש ידע בדיוק מה להעלות.
 
 ### Discover Sources / Deep Research (איסוף מקורות חיצוניים)
 ב-Sources panel → טאב Discover. **Fast Research** ~30 שניות, ~10 מקורות. **Deep Research** ~5 דקות, ~40 מקורות (web בלבד). מכסות: Free 10/חודש, Pro 75/חודש.
@@ -74,6 +84,10 @@ Point מרכיב מהתוכן הגולמי **מסמך מקור נקי אחד** (
 
 כל תבנית עצמאית. עברית כברירת מחדל; אם `language: en`, תרגם והשמט "בעברית". החלף `[סוגריים]` בערכים מה-intake.
 
+> **לתבניות הוויזואליות (Infographic, Slide Deck, Video):** כל פרומפט חייב לכלול בתוכו **בלוק design system** מפורש (פלטה עם hex, טיפוגרפיה, סגנון-איור/צילום, מוטיבים, מצב-רוח ויזואלי) הלקוח מערכת-המותג שעובדים עליה, **plus את התוכן המדויק** שצריך להופיע בתוצר. אסור פרומפט ויזואלי גנרי שמסתיים ב"תוסיף כאן את התוכן". אם אין למשתמש design system, Point מבקש אותו או מציע ברירת-מחדל לפני שהוא פולט את הפרומפט.
+
+> **לא בערכת PointToPower:** התבניות של `Audio Overview - Brief`, `Audio Overview - Deep Dive`, ו-`Mind Map` נשארות כאן כרפרנס כללי ל-NotebookLM, אבל **אסור** לכלול אותן בערכה שפולטים למצגת.
+
 **Audio Overview - Brief:**
 ```
 הפק תקציר אודיו קצר באורך 3 דקות מהמקורות, בעברית, בנימה רגועה ומדויקת.
@@ -86,11 +100,17 @@ Point מרכיב מהתוכן הגולמי **מסמך מקור נקי אחד** (
 ושאלות פתוחות. הסבר כל מונח טכני לפני שאתה ממשיך.
 ```
 
-**Standard Video Overview:**
+**Standard Video Overview (עצמאי, עם design system plus תוכן):**
 ```
-Create a Standard Video Overview for a non-expert audience. Lead with the single
-most surprising finding. Cover three main points with concrete examples. Close with
-one practical takeaway. Visual style: [Whiteboard/Classic].
+צור Video Overview לקהל [הקהל], בעברית. פתח ב-[הממצא/הטענה המפתיעים ביותר].
+כסה את שלוש הנקודות: [נקודה 1], [נקודה 2], [נקודה 3], כל אחת עם דוגמה קונקרטית.
+סיים ב-[ה-takeaway המעשי].
+
+סגנון ויזואלי (design system של [המותג]):
+- פלטה: [hex ראשי], [hex משני], [hex רקע].
+- טיפוגרפיה: [גופן כותרות], [גופן גוף].
+- סגנון: [flat illustration / photoreal / diagram], מוטיבים: [מוטיבים], מצב-רוח: [רגוע/אנרגטי].
+שמור על הסגנון הזה בכל פריים.
 ```
 
 **Mind Map:**
@@ -99,18 +119,29 @@ one practical takeaway. Visual style: [Whiteboard/Classic].
 [ענף 1], [ענף 2], [ענף 3]. כל ענף עד 4 צמתים. תמצות בלבד, בלי משפטים מלאים.
 ```
 
-**Infographic:**
+**Infographic (עצמאי, עם design system plus תוכן):**
 ```
-צור Infographic בסגנון [Professional/Bento Grid]. התמקד ב-5 נקודות הנתונים
-החשובות, היררכיה ויזואלית לפי חשיבות. כותרת מובילה אחת, שלוש נקודות תמיכה,
-קריאה לפעולה אחת. 30% white space מינימום. בלי קישוט שלא נושא מידע.
+צור Infographic בסגנון [Professional/Bento Grid/Timeline].
+תוכן מדויק: כותרת מובילה "[הכותרת]", שלוש נקודות תמיכה: [נקודה 1], [נקודה 2],
+[נקודה 3], וקריאה-לפעולה אחת: "[CTA]". היררכיה ויזואלית לפי חשיבות.
+
+design system של [המותג]:
+- פלטה: [hex ראשי], [hex משני], [hex רקע], [hex טקסט].
+- טיפוגרפיה: [גופן כותרות], [גופן גוף].
+- 30% white space מינימום, בלי קישוט שלא נושא מידע, בלי טקסט שלא צוין.
 ```
 
-**Slide Deck (McKinsey discipline):**
+**Slide Deck (מצגת-דוגמה להשראה, עצמאי, עם design system plus תוכן):**
 ```
-Design a slide deck from the sources, [10] slides max. Rules: every slide title is
-an action statement, not a topic label. Max 3 bullets per slide, each with one
-specific data point or named example. Final slide: one bold recommendation. Export PPTX.
+צור מצגת-דוגמה מהמקורות, [10] שקופיות מקסימום, בעברית. זו דוגמת-השראה לסגנון,
+לא המצגת הסופית. כללים: כל כותרת היא משפט-פעולה, לא תווית-נושא. עד 3 בולטים
+לשקופית, כל אחד עם נתון או דוגמה בשם. שקופית אחרונה: המלצה אחת חדה.
+תוכן: בנה סביב [הטענה המרכזית] ושלוש הנקודות [נקודה 1], [נקודה 2], [נקודה 3].
+
+design system של [המותג]:
+- פלטה: [hex ראשי], [hex משני], [hex רקע]. טיפוגרפיה: [גופן כותרות], [גופן גוף].
+- סגנון: [נקי/מודגש], מוטיבים: [מוטיבים].
+ייצא PPTX.
 ```
 
 **Briefing Doc:**
@@ -140,26 +171,34 @@ specific data point or named example. Final slide: one bold recommendation. Expo
 
 ## חלק 5 - לוגיקת הרכבת הערכה
 
-הערכה **תמיד** כוללת שלושה מרכיבי-ליבה, ואז 1-3 artifacts של Studio לפי (genre, audience, language, intent). הסקיל פולט הכל בפעימה אחת, כל קובץ מתויג במטרתו.
+כיוון שהיעד תמיד מצגת, הערכה בנויה משלושה מרכיבי-ליבה, plus חבילת מסמכי BRIEF (תוכן), plus חבילת ויזואלים (השראה). הכל בפעימה אחת, כל קובץ נקי ומתויג במטרתו, נשמר לפי מבנה התיקיות (`shared/filesystem-conventions.md`).
 
 **מרכיבי ליבה (תמיד):**
-1. `01-source-document.md` - מסמך המקור הנקי להעלאה (חלק 3).
-2. `02-deep-research.md` - פרומפט Discover/Deep Research לאיסוף ההקשר החיצוני שהמצגת צריכה (תחרות, מדע, שוק).
-3. `00-INDEX.md` - מסביר את הערכה, באיזה סדר להריץ, ולאן לשמור כל תוצר חוזר (`content/`).
+1. `01-upload-to-notebooklm/00-source-document.md` , מסמך המקור הנקי להעלאה (חלק 3), plus העתקי קבצי-המקור הרלוונטיים ו-`_manifest.md` שמסמן אות מול רעש.
+2. `02-notebooklm-prompts/01-deep-research.md` , פרומפט Discover/Deep Research לאיסוף ההקשר החיצוני (תחרות, מדע, שוק).
+3. `02-notebooklm-prompts/00-INDEX.md` , מסביר את הערכה, באיזה סדר להריץ, ולאן לשמור כל תוצר חוזר (`03-returns/`).
 
-**בחירת Studio artifacts לפי genre:**
+**חבילת BRIEF (תוכן , תמיד):** 2-3 פרומפטים ל-`Briefing Doc`, כל אחד בזווית אחרת (לדוגמה: תקציר-מנהלים, נקודות-מפתח עם נתונים, סיכונים-ופתרונות). אלה התוכן שהמשתמש מוריד ועובד איתו, ושמזין גם את חוברת-המנחה וגם את תוכן-השקופיות. כשצריך עומק , `Study Guide` או `Custom Report` נוסף.
 
-| genre | ערכה מומלצת (Studio) | סיבה |
+**חבילת ויזואלים (השראה , תמיד, בסגנון-העיצוב של המותג):**
+
+| Artifact | כמה | תפקיד בערכה |
 |---|---|---|
-| `pitch` (קצר) | Audio Overview - Brief + Mind Map | חימום משקיעים + מבט-על מוצר. בלי Video אם יש דמו חי. |
-| `keynote` / `ted` | Audio Brief + Infographic | חידוד המסר + ויזואל אחד חזק להפצה. |
-| `lecture` / `workshop` | Study Guide + Mind Map + Briefing Doc | עומק, מפת מושגים, חומר קריאה. |
-| `sales` | Briefing Doc + Standard Video Overview | מסמך החלטה + סרטון לקהל שלא הגיע. |
-| `briefing` | Briefing Doc + Infographic | תקציר exec + סנאפשוט ויזואלי. |
-| `demo` | Infographic + Audio Brief | תמונת סיכום + חימום, בלי Video שמתחרה בדמו. |
+| `Infographic` | 2-3 | זוויות/סגנונות שונים לסיכום ויזואלי, מקור-השראה לפריסה ולפלטה. |
+| `Slide Deck` | 2-3 | מצגות-דוגמה שמראות סגנון ויזואלי אפשרי למצגת הסופית. |
+| `Video Overview` | 1 | סרטון בסגנון-העיצוב, מקור-השראה לתנועה ולנרטיב. |
+
+כל פרומפט ויזואלי **עצמאי לחלוטין**: מפרט-ויזואלי מלא מעוגן ב-design system של המותג plus התוכן המדויק שצריך להופיע בתוצר.
+
+**כוונון לפי genre (משנה דגש, לא מבטל את המבנה):**
+- `pitch` / `keynote` / `ted` , דגש על Infographic חד plus מצגת-דוגמה נקייה; BRIEF של תקציר-מנהלים.
+- `lecture` / `workshop` , הוסף `Study Guide`; BRIEF עם מפת-מושגים בפרוזה (לא Mind Map).
+- `sales` / `briefing` , דגש על BRIEF של decision memo plus Infographic.
+- `demo` , אם יש דמו חי, ה-Video הוא של הפתיחה/ההקשר, לא של הדמו עצמו.
 
 **כללי דיוק:**
-- **אל תכלול artifact בלי סיבה.** עדיף ערכה ממוקדת מ-5 פרומפטים רפויים.
-- **התאם warnings בכל artifact:** עברית + Audio/Video → `rtl-audio-weak`; עברית ארוכה → `hebrew-quality-tier-c`; Cinematic/feature שדורש Pro → `pro-tier-required`; נתונים שמתיישנים → `stale-watch`.
-- **דמו חי בדק → אל תכלול Video של הדמו** (מבטל את הדמו). Video של הפתיחה לקהל שלא הגיע - בסדר.
-- **output_type teleprompter → בדרך כלל ללא Studio artifacts** (התוכן לדובר, לא לקהל); הליבה (מסמך מקור + Deep Research) עדיין רלוונטית למחקר.
+- **אסור Audio (Brief/Deep Dive) ואסור Mind Map.** הם לא משרתים בניית מצגת. זו הטעות מהדריירן.
+- **אל תכלול artifact בלי סיבה.** ערכה ממוקדת עדיפה, אבל חבילת ה-BRIEF וחבילת הוויזואלים הן ברירת-המחדל למצגת.
+- **התאם warnings בכל artifact:** עברית + Video → `rtl-audio-weak`; עברית ארוכה → `hebrew-quality-tier-c`; Cinematic/feature שדורש Pro → `pro-tier-required`; נתונים שמתיישנים → `stale-watch`.
+- **דמו חי בדק → אל תכלול Video של הדמו** (מבטל את הדמו). Video של הפתיחה לקהל שלא הגיע , בסדר.
+- **output_type teleprompter → ויזואלים מצומצמים** (התוכן לדובר), אבל חבילת ה-BRIEF עדיין מלאה כי היא מזינה את חוברת-המנחה. הליבה (מסמך מקור + Deep Research) תמיד רלוונטית.

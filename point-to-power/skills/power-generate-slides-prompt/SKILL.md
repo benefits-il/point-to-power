@@ -31,6 +31,21 @@ allowed-tools:
 
 ## Process
 
+> **W-G1 , פרומפט בלבד.** הסקיל פולט פרומפט להדבקה ב-Gemini; הוא לעולם לא בונה את מצגת Google Slides בעצמו. Gemini בונה את הדק מהפרומפט.
+
+### Design Quality Gate (W-G3)
+
+הפרומפט הראשי שמוחזר חייב לעמוד בכל הבנדים הבאים *לפני* שהוא מוחזר. אם הוא נכשל בבנד כלשהו, ה-emitter *לא מחזיר אותו*; הוא מחזק את המפרט קודם:
+
+- גופנים נעולים מפורשות (heading + body + fallback chain) מ-R3 Pairing Rules.
+- פלטה עם כל ערכי ה-hex (primary, accent, background, text) verbatim בתוך הפרומפט.
+- spacing rhythm מפורש (base unit plus סקאלה).
+- מיקום-ויזואל לכל שקופית מפורש ולא עמום (לא "tbd", לא "image here"); הפניה לבלוק פרומפט-התמונה המתאים.
+- RTL מפורש כש-language=he/mixed (כיוון, יישור, מספרים/מותג LTR).
+- motion קונקרטי כשהסגנון דורש (למשל "fade-in 300ms", לא "תוסיף אנימציה").
+- בלי תארים מעורפלים ("מודרני"/"מגניב"/"אלגנטי") בלי פירוט נצפה.
+- סגנון אחד נעול (style_record.primary), לא "תשקול X או Y".
+
 1. קרא את `../../references/R5-gemini-slides.md` במלואו. זה המקור ליכולות Gemini Canvas / Gemini-in-Slides, לאיך לנסח לו פרומפט, לזרימת הייצוא ל-Google Slides, ולמגבלה המרכזית (הפלט הוא טיוטה שדורשת ליטוש).
 2. קרא את `../../references/R3-stage-3-output.md`, מקטע הסגנון שנבחר, כדי לחלץ implementation cues (פלטה, טיפוגרפיה, צפיפות) שיתורגמו להוראות עיצוב מפורשות ל-Gemini.
 3. קרא את `../../references/R1-01-typography.md` ו-`../../references/R1-02-density.md` להבטחת baseline טיפוגרפי ו-pacing נכון בדק (slide יחיד = רעיון אחד + visual, לא wall of text).

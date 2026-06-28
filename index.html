@@ -276,10 +276,9 @@
       <a class="nav__link" href="#mocks">תצוגה</a>
       <a class="nav__link" href="#value">ערך</a>
       <a class="nav__link" href="#requirements">דרישות</a>
-      <a class="nav__link" href="#claude-ai-project">Claude.ai</a>
-      <a class="nav__link" href="#install">פלאגין</a>
+      <a class="nav__link" href="#install">התקנה</a>
       <a class="btn btn--ghost" href="https://github.com/benefits-il/point-to-power"><i class="ti ti-brand-github"></i> GitHub</a>
-      <a class="btn btn--primary" href="./download/point-to-power-claude-ai-project.zip" download><i class="ti ti-download"></i> הורדה</a>
+      <a class="btn btn--primary" href="./download/point-to-power-plugin.zip" download><i class="ti ti-download"></i> הורדת הפלאגין</a>
     </nav>
   </div>
 </header>
@@ -295,7 +294,7 @@
     <p class="hero__subtitle">מצגות שמתחילות מתוכן, לא מעיצוב.</p>
     <p class="hero__deck">שרשרת של שני סוכנים: <strong>Point</strong> מאפיין ומבנה את המסר ל-handoff, ו-<strong>POWER</strong> הופך אותו לפרומפט מצגת מעוצב — PowerPoint או HTML (וגם Google Slides).</p>
     <div class="hero__cta-row">
-      <a class="btn btn--primary btn--lg" href="./download/point-to-power-claude-ai-project.zip" download><i class="ti ti-download"></i> הורדה ל-Claude.ai</a>
+      <a class="btn btn--primary btn--lg" href="#install"><i class="ti ti-download"></i> התקנת הפלאגין</a>
       <a class="btn btn--secondary btn--lg" href="#how"><i class="ti ti-route"></i> איך זה עובד</a>
     </div>
   </div>
@@ -375,7 +374,7 @@
         <p class="timeline-item__body">Point נותן לכם מיד ערכת NotebookLM מלאה: מסמך מקור להעלאה, פרומפט מחקר, ופרומפטי Studio. אתם מריצים, מחזירים את התוצאות, והוא עורך אותן יחד אתכם לתוכן שקפים סופי.</p>
         <ul class="timeline-item__details">
           <li>כך התוכן מבוסס על מחקר אמיתי (תחרות, נתונים, הקשר) — לא על ניחושים. הוא דואג לזרימה סיפורית, מסר אחד לשקופית, ופתקי דובר.</li>
-          <li>רק אחרי שאתם מאשרים את התוכן, הוא מרכיב את ה-handoff בתיקיית <code class="mono">build/&lt;slug&gt;/handoff/</code> — מוכן לשלב הבא.</li>
+          <li>רק אחרי שאתם מאשרים את התוכן, הוא מרכיב מארז נקי בתיקיית <code class="mono">build/&lt;slug&gt;/04-package-for-power/</code> וכותב גם חוברת מנחה — מוכן לשלב הבא.</li>
         </ul>
       </div>
     </div>
@@ -572,33 +571,31 @@ target: <span class="string">"html"</span>
   </div>
 </section>
 
-<section id="claude-ai-project" aria-labelledby="cap-title">
-  <div class="section__head">
-    <span class="kicker"><i class="ti ti-browser"></i> בלי התקנה</span>
-    <h2 id="cap-title" class="section__title">דרך <span class="ul">Claude.ai Project</span> — בלי פלאגין</h2>
-    <p class="section__deck">אין צורך ב-Claude Code או ב-Cowork. מורידים, מקימים שני Projects, ומתחילים. מתאים לכל מי שעובד ב-Claude.ai בדפדפן.</p>
-  </div>
-  <div style="text-align:center; margin-bottom:40px;">
-    <a class="btn btn--primary btn--lg" href="./download/point-to-power-claude-ai-project.zip" download><i class="ti ti-download"></i> הורדת החבילה (Point + POWER)</a>
-  </div>
-  <div class="how-grid">
-    <div class="how-step"><span class="how-step__num">01</span><h4 class="how-step__title">הורדה ופתיחה</h4><p class="how-step__body">מורידים את ה-zip ופותחים. בפנים: תיקיית <span class="cmd">point</span>, תיקיית <span class="cmd">power</span>, וקובץ הוראות.</p></div>
-    <div class="how-step"><span class="how-step__num">02</span><h4 class="how-step__title">Project ראשון — Point</h4><p class="how-step__body">יוצרים Project בשם Point, מדביקים את <span class="cmd">point/system-prompt.md</span> ל-Instructions, ומעלים את 21 הקבצים מ-<span class="cmd">point/knowledge-files</span>.</p></div>
-    <div class="how-step"><span class="how-step__num">03</span><h4 class="how-step__title">Project שני — POWER</h4><p class="how-step__body">יוצרים Project בשם POWER, מדביקים את <span class="cmd">power/system-prompt.md</span>, ומעלים את 17 הקבצים מ-<span class="cmd">power/knowledge-files</span>.</p></div>
-    <div class="how-step"><span class="how-step__num">04</span><h4 class="how-step__title">מתחילים</h4><p class="how-step__body">בצ'אט של Point: "אני רוצה לבנות מצגת על...". בסוף מעתיקים את ה-handoff ופותחים צ'אט ב-POWER.</p></div>
-  </div>
-</section>
-
 <section id="install" aria-labelledby="install-title">
   <div class="section__head">
-    <span class="kicker">INSTALL · פלאגין</span>
-    <h2 id="install-title" class="section__title">מניפסט אחד, <span class="ul">שתי סביבות.</span></h2>
-    <p class="section__deck">למשתמשים מתקדמים: אותו plugin עובד גם ב-Claude Code וגם ב-Cowork — בלי הגדרות נוספות.</p>
+    <span class="kicker"><i class="ti ti-plug"></i> INSTALL · התקנה</span>
+    <h2 id="install-title" class="section__title">פלאגין אחד, <span class="ul">שתי דרכי התקנה.</span></h2>
+    <p class="section__deck">אותו plugin עובד ב-Claude Code וב-Cowork. בחרו את הדרך הנוחה: marketplace או הורדת zip.</p>
   </div>
-  <div class="how-grid" style="grid-template-columns:repeat(3,1fr)">
-    <div class="how-step"><span class="how-step__num">CC</span><h4 class="how-step__title">Claude Code</h4><p class="how-step__body">העתק את התיקייה לתיקיית ה-plugins (או דרך marketplace) והפעל מחדש.</p></div>
-    <div class="how-step"><span class="how-step__num">CW</span><h4 class="how-step__title">Cowork</h4><p class="how-step__body">התקן דרך ה-marketplace, או שים בנתיב ה-plugins המקומי וטען מחדש.</p></div>
-    <div class="how-step"><span class="how-step__num">✓</span><h4 class="how-step__title">אימות</h4><p class="how-step__body">ודא ששתי הפקודות רשומות: <span class="cmd">/point</span> ו-<span class="cmd">/power</span>.</p></div>
+
+  <div class="how-grid" style="grid-template-columns:1fr 1fr">
+    <div class="how-step">
+      <span class="how-step__num">A</span>
+      <h4 class="how-step__title">דרך ה-marketplace (מומלץ)</h4>
+      <p class="how-step__body">מריצים בתוך Cowork או Claude Code, ואז טוענים מחדש:</p>
+      <p class="how-step__body"><span class="cmd">/plugin marketplace add benefits-il/point-to-power</span></p>
+      <p class="how-step__body"><span class="cmd">/plugin install point-to-power@benefits-plugins</span></p>
+    </div>
+    <div class="how-step">
+      <span class="how-step__num">B</span>
+      <h4 class="how-step__title">הורדת zip של הפלאגין</h4>
+      <p class="how-step__body">מורידים, מחלצים, וגוררים את תיקיית <span class="cmd">point-to-power</span> לתיקיית ה-plugins של Cowork. טוענים מחדש.</p>
+      <p class="how-step__body" style="margin-top:14px;"><a class="btn btn--primary" href="./download/point-to-power-plugin.zip" download><i class="ti ti-download"></i> הורדת הפלאגין</a></p>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:28px;">
+    <p class="section__deck">אחרי ההתקנה ודאו ששתי הפקודות רשומות: <span class="cmd">/point</span> ו-<span class="cmd">/power</span>.</p>
   </div>
 </section>
 

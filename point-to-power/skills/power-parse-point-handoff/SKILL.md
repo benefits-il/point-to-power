@@ -1,6 +1,6 @@
 ---
 name: power-parse-point-handoff
-description: Activate at POWER session start to read a raw handoff (filesystem read or pasted body) and produce a structured AST of meta, slides, and tail.
+description: Activate at POWER session start to read a raw handoff from build/<slug>/04-package-for-power/ (filesystem read or pasted body) and produce a structured AST of meta, slides, and tail.
 version: 1.0.0
 user-invocable: false
 disable-model-invocation: false
@@ -18,7 +18,7 @@ allowed-tools:
 
 - **source** (enum: `filesystem` | `paste`). קובע מאיפה מגיע הטקסט.
 - **payload** (string או path):
-  - אם source=filesystem -> path לקובץ markdown תחת `build\<slug>\handoff\` (אופציונלי; אם חסר, קרא את `../../shared/filesystem-conventions.md` ובחר את קובץ ה-handoff האחרון מכל תיקיות הפרויקט). אפשר גם להעביר project slug, ואז נבחר ה-handoff האחרון תחת `build\<slug>\handoff\`.
+  - אם source=filesystem -> path לקובץ markdown תחת `build\<slug>\04-package-for-power\` (אופציונלי; אם חסר, קרא את `../../shared/filesystem-conventions.md` ובחר את קובץ ה-handoff האחרון מכל תיקיות הפרויקט). אפשר גם להעביר project slug, ואז נבחר ה-handoff האחרון תחת `build\<slug>\04-package-for-power\`.
   - אם source=paste -> מחרוזת ה-markdown הגולמית שהלומד הדביק כהודעה ראשונה.
 
 ## Outputs
@@ -58,6 +58,11 @@ tail:
   visual_queue:                  # רשימה
     - slide_number: 1
       placeholder: ...
+  selected_assets:               # רשימה, אופציונלית. נשאבת מ-`### Selected Assets` ב-Tail. ריקה אם הסעיף חסר.
+    - asset: ...                 # שם ה-asset (למשל logo.png, chart-q3.png)
+      role: ...                  # role=<...>
+      serves: ...                # serves=<slides>, למשל "1,4" או "all"
+      note: ...                  # note=<...> אופציונלי
   notes_to_power: ...            # מחרוזת אופציונלית
 parse_errors:                    # רשימה. ריקה אם הניתוח עבר נקי.
   - code: header-missing | header-malformed | block-malformed | ...
@@ -67,9 +72,10 @@ parse_errors:                    # רשימה. ריקה אם הניתוח עבר
 ## Process
 
 1. *טען טקסט.*
-   - אם source=filesystem ויש path -> קרא את הקובץ ב-UTF-8.
-   - אם source=filesystem ואין path -> קרא את `../../shared/filesystem-conventions.md` להבנת הקריטריון של "קובץ ה-handoff האחרון", סרוק את תיקיות ה-`build\<slug>\handoff\` ובחר.
+   - אם source=filesystem ויש path -> קרא את הקובץ ב-UTF-8. הנתיב הקנוני של חבילת ה-handoff הוא `build\<slug>\04-package-for-power\`.
+   - אם source=filesystem ואין path -> קרא את `../../shared/filesystem-conventions.md` להבנת הקריטריון של "קובץ ה-handoff האחרון", סרוק את תיקיות ה-`build\<slug>\04-package-for-power\` ובחר.
    - אם source=paste -> השתמש במחרוזת ישירות.
+   - *(B7) קרא גם את `04-package-for-power\_assets-index.md` אם הוא קיים באותה תיקייה.* Point כותב לשם אינדקס של ה-assets שהוא צירף (filenames, role, serves). שמור אותו כדי להעשיר את `tail.selected_assets` (filename שמופיע באינדקס אבל לא ב-`### Selected Assets` עדיין נכלל ברשימה עם השדות שזמינים מהאינדקס). אם הקובץ חסר -> דלג בשקט, אין parse_error.
 2. *סור קוד-פנס חיצוני אחד.* לפי החוזה Section 8, סבול עד fence חיצוני אחד מסוג ` ``` `, ` ```markdown `, או ` ```md `. השאר fence-ים פנימיים בתוך ערכי שדות כפי שהם. אם יש fence חיצוני מסוג אחר (לדוגמה: ` ```python `) -> רשום parse_error קוד `header-malformed` והמשך כאילו אין fence (הוולידטור יתפוס את הכשל).
 3. *גזור white-space מהתחלת הטקסט.* שורות ריקות לפני הכותרת מותרות.
 4. *קרא את השורה הראשונה הלא-ריקה.*
@@ -98,6 +104,10 @@ parse_errors:                    # רשימה. ריקה אם הניתוח עבר
      - פרסר את הגוף כ-bullets (כמו ב-Meta וב-Slide).
    - ה-H3 בדיוק `### Visual Queue`:
      - פרסר bullets במבנה `- **slide_<N>:** <placeholder>`. שמור כ-list של {slide_number, placeholder}.
+   - ה-H3 בדיוק `### Selected Assets` (sub-section אופציונלי בזנב ה-Tail):
+     - פרסר bullets במבנה `- **<asset>:** role=<...>; serves=<slides>; note=<...>`.
+     - חלץ `asset` מבין `**` ל-`:`. מהערך אחרי ה-`:` חלץ את הזוגות המופרדים ב-`;`: `role=<...>`, `serves=<slides>`, `note=<...>` (note אופציונלי). שמור כ-list של {asset, role, serves, note} ב-`tail.selected_assets`.
+     - מזג עם מה שנקרא מ-`_assets-index.md` (B7): אם asset הופיע באינדקס אבל לא בסעיף הזה, צרף אותו לרשימה עם השדות הזמינים. אם asset מופיע בשניהם, ערכי ה-`### Selected Assets` גוברים.
    - ה-H3 בדיוק `### Notes To POWER`:
      - אסוף את כל הטקסט אחרי ה-H3 ועד סוף הקובץ או עד H3 הבא. שמור כמחרוזת.
 9. *החזר את ה-AST.* parse_errors יכול להיות ריק (parse נקי) או מלא (parse פגום). אל תזרוק exception על parse_errors, תן ל-validator לטפל.
@@ -118,7 +128,7 @@ parse_errors:                    # רשימה. ריקה אם הניתוח עבר
 
 - קובץ ב-encoding לא UTF-8 -> נסה fallback ל-cp1255 (Windows Hebrew). אם נכשל, החזר AST ריק עם parse_error קוד `encoding-error`.
 - קובץ גדול מאוד (מעל 5MB) -> חתוך והחזר parse_error `file-too-large`. handoff סביר הוא עד 50K.
-- אין אף תיקיית `build\<slug>\handoff\` ו-source=filesystem בלי path -> החזר AST ריק עם parse_error `no-handoff-files` ובקש מהמשתמש להדביק במקום זאת.
+- אין אף תיקיית `build\<slug>\04-package-for-power\` ו-source=filesystem בלי path -> החזר AST ריק עם parse_error `no-handoff-files` ובקש מהמשתמש להדביק במקום זאת.
 - regex של slide heading לא תופס -> רשום `no-slides`.
 
 ## Test fixtures

@@ -20,15 +20,17 @@ allowed-tools:
 - **content_approved** (boolean). **precondition קשיח:** אם הוא לא `true`, אל תרץ. החזר לפונקציה הקוראת שצריך אישור (Phase 5). ה-handoff מורכב רק מתוכן שהלומד אישר, לעולם לא לפני.
 - **intake_record** (meta + content_units מקוריים, לרפרנס).
 - **slides** מ-`structure-content-to-slides` (התוכן הערוך והמאושר).
-- **project_slug** (לחישוב נתיב הכתיבה `build/<slug>/handoff/`).
-- **notebooklm_recommendations** (אופציונלי, ברירת מחדל list ריק). בזרימה הנוכחית הערכה כבר נפלטה ל-`prompts/` ב-Phase 3, אז בדרך כלל זה ריק. אם הלומד ביקש שתיעוד של תוצר NotebookLM ספציפי ילווה את ה-handoff, אפשר לכלול 0..N רשומות לפי החוזה.
+- **project_slug** (לחישוב נתיב הכתיבה `build/<slug>/04-package-for-power/`).
+- **selected_assets** (אופציונלי): הנכסים שהלומד אהב וסימן ב-`03-returns/_liked.md` (infographic, סגנון מ-slide deck, palette, reference image). הסקיל מעתיק אותם ל-`04-package-for-power/`, כותב `_assets-index.md`, וכותב את סקשן `### Selected Assets` ב-handoff.
+- **notebooklm_recommendations** (אופציונלי, ברירת מחדל list ריק). בזרימה הנוכחית הערכה כבר נבנתה ב-Phase 3, אז בדרך כלל זה ריק.
 - **notes_to_power** (טקסט עברי חופשי, אופציונלי, עד 400 מילים).
 - **channel** (enum: `filesystem` | `paste`). קובע אם הסקיל גם כותב לדיסק.
 
 ## Outputs
 
 - **handoff_markdown** (מחרוזת Markdown יחידה, תואמת מדויקת לחוזה).
-- **filesystem_path** (אם channel=filesystem), נתיב יחסי לקובץ שנכתב, למשל `build\<slug>\handoff\20260604-2214-colortune-pitch-01.md`.
+- **filesystem_path** (אם channel=filesystem), נתיב יחסי לקובץ שנכתב, למשל `build\<slug>\04-package-for-power\20260604-2214-colortune-pitch-01.md`.
+- **package_files** (אם יש selected_assets): העתקי הנכסים plus `_assets-index.md` שנכתבו ל-`04-package-for-power/`.
 - **warnings** (list אופציונלי), אזהרות שעלו בעת הגייט הפנימי אך לא חסמו (כרגע רק `forbidden-glyph`).
 
 ## Process
@@ -60,6 +62,7 @@ allowed-tools:
    - חובה: כתוב H3 בדיוק `### Visual Queue` (גם אם הרשימה ריקה).
    - הרכב את Visual Queue: עבור על השקופיות לפי הסדר; לכל שקופית שבה visual_placeholder אינו `none`, כתוב שורה `- **slide_<N>:** <ערך_הפלייסהולדר>`. אם כל השקופיות `none`, כתוב את ה-H3 ולא כלום אחריו.
    - אם יש notes_to_power, כתוב H3 בדיוק `### Notes To POWER` ואחריו פסקה אחת בעברית עד 400 מילים. אם אין, דלג על ה-H3.
+   - אם יש selected_assets, כתוב H3 בדיוק `### Selected Assets` ואחריו bullet אחד פר נכס בפורמט מסעיף 4 של החוזה: `- **<asset>:** role=<...>; serves=<slides>; note=<...>`. אם אין, דלג על ה-H3.
 8. *הרץ את הגייט הפנימי.* עבור על המחרוזת המורכבת והפעל את כל 15 כללי ה-rejection מ-`shared/validation-rules.md`. עבור כל כשל:
    - אם זה שדה חסר -> הוסף אותו (אם יש לך את המידע) או החזר שגיאה לסקיל קודם.
    - אם זה enum לא חוקי -> תקן אם ברור (לדוגמה: `He` -> `he`); אם לא ברור, החזר שגיאה.
@@ -74,10 +77,11 @@ allowed-tools:
     - קרא את `../../shared/filesystem-conventions.md` לחישוב הנתיב.
     - חשב slug: עדיפות session_id > learner_label > "untitled". נקה לאסקי lowercase עם מקפים. בדרך כלל זה ה-project_slug שכבר נקבע ב-Phase 2.
     - חשב timestamp בפורמט `YYYYMMDD-HHMM` של רגע הכתיבה.
-    - הרכב נתיב: `build\<slug>\handoff\<timestamp>-<slug>.md`.
+    - הרכב נתיב: `build\<slug>\04-package-for-power\<timestamp>-<slug>.md`.
     - צור את הספרייה אם לא קיימת.
     - כתוב את הקובץ ב-UTF-8 בלי BOM. שורות LF (לא CRLF).
-12. החזר את handoff_markdown תמיד. אם channel=filesystem, החזר גם את filesystem_path. אם יש warnings, החזר אותן.
+    - אם יש selected_assets: העתק כל נכס מ-`03-returns/` אל `04-package-for-power/`, וכתוב `04-package-for-power/_assets-index.md` שממפה כל נכס לתפקיד ולשקופיות שהוא משרת (תואם לסקשן `### Selected Assets`).
+12. החזר את handoff_markdown תמיד. אם channel=filesystem, החזר גם את filesystem_path ו-package_files. אם יש warnings, החזר אותן.
 
 ## Edge cases
 

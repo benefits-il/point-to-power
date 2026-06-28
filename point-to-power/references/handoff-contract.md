@@ -1,7 +1,8 @@
-# PointToPower Handoff Contract v1.0
+# PointToPower Handoff Contract v1.1
 
 > Authoritative schema for every Point to POWER handoff file.
 > Both agents are built against this document. Skills in Steps 3 through 6 read this contract as their source of truth.
+> v1.1 is a non-breaking, additive revision of v1.0: it appends one OPTIONAL tail sub-section (`### Selected Assets`) and updates the filesystem paths (Section 7) to the numbered folder model. The header line stays the literal `# PointToPower Handoff v1.0` so every existing POWER build keeps matching it, and a v1.0 build silently ignores the optional addition.
 
 ---
 
@@ -150,8 +151,9 @@ The tail block starts with the H2 heading `## Tail` and ends at the end of file.
 | 1 | `notebooklm_recommendations` | `### NotebookLM Recommendation <i>` | Optional, 0..N | One H3 per recommendation, numbered from 1. Each recommendation is a bullet block with four fields. |
 | 2 | `visual_queue` | `### Visual Queue` | Required | Aggregates every per-slide `visual_placeholder` that is not `none`, in slide order. POWER batch-generates image prompts from this queue. |
 | 3 | `notes_to_power` | `### Notes To POWER` | Optional | Free Hebrew text. Any context POWER needs that did not fit elsewhere. |
+| 4 | `selected_assets` | `### Selected Assets` | Optional, 0..1 (v1.1) | Concrete assets the learner already produced in NotebookLM and chose to reuse (an infographic, a sample-deck style, a palette, a reference image). Lists each asset, the slide(s) it serves, and its role, so POWER ingests the real asset instead of only a textual description. Mirrors `04-package-for-power\_assets-index.md`. |
 
-**Total tail sub-sections: 3. Required: 1. Optional: 2.**
+**Total tail sub-sections: 4. Required: 1. Optional: 3.**
 
 ### NotebookLM Recommendation structure
 
@@ -177,6 +179,16 @@ POWER cross-checks the queue against the slides: every non-`none` placeholder mu
 ### Notes To POWER structure
 
 A single block of free Hebrew text under the H3. No internal structure required. Cap at 400 words.
+
+### Selected Assets structure (v1.1, optional)
+
+Present only when the learner picked concrete NotebookLM artifacts to reuse. One bullet per asset, in this exact shape:
+
+```markdown
+- **<asset_filename or palette name>:** role=<infographic | sample-deck-style | palette | reference-image>; serves=<slide numbers or `all`>; note=<one short Hebrew line>
+```
+
+`asset_filename` references a file the learner saved into `03-returns\` and that Point copied into `04-package-for-power\`. When the asset is a palette rather than a file, name it (for example `warm-earth`) and give the hex values in the note. POWER reads this sub-section together with `04-package-for-power\_assets-index.md` to ingest the real asset (use the palette, match the sample-deck style, place the infographic) instead of inventing one. This sub-section never replaces the Visual Queue; the Visual Queue still describes what each slide needs, and Selected Assets says what the learner already has.
 
 ### Example tail block
 
@@ -274,18 +286,20 @@ When a schema bump ships, Point and POWER MUST bump in lockstep within the same 
 
 ## 7. Filesystem path (Claude Code and Cowork)
 
-When Point runs in the Claude Code plugin or the Cowork plugin, each project lives under its own per-project folder, and the handoff is written to the `handoff\` subfolder:
+When Point runs in the Claude Code plugin or the Cowork plugin, each project lives under its own per-project folder, with numbered subfolders that fix the order of the flow:
 
 ```
 build\<slug>\
-  content\    # learner's returned NotebookLM outputs (Point reads, Phase 4)
-  prompts\    # the NotebookLM kit Point emits (Phase 3)
-  assets\     # images/media (POWER / learner)
-  handoff\    # the handoff file, written Phase 6 after approval:
-              #   build\<slug>\handoff\<YYYYMMDD-HHMM>-<slug>.md
+  01-upload-to-notebooklm\   # the actual source files the learner uploads to NotebookLM + _manifest.md (signal vs noise)
+  02-notebooklm-prompts\     # one clean, copy-ready prompt per file (briefs + visuals), each prompt self-contained
+  03-returns\                # the artifacts the learner downloads back from NotebookLM + _liked.md
+  04-package-for-power\      # the clean package POWER consumes:
+                             #   <YYYYMMDD-HHMM>-<slug>.md  (the handoff)
+                             #   selected asset copies + _assets-index.md
+  presenter-handbook.md      # per-slide speaker script for the human presenter (NOT a POWER input)
 ```
 
-This is a filesystem-location convention, not a schema change: the handoff file's structure (Sections 1-4) is identical regardless of where it is written, so moving the path does not bump the contract version.
+The handoff file is written to `04-package-for-power\<YYYYMMDD-HHMM>-<slug>.md`. This is a filesystem-location convention, not a schema change: the handoff file's structure (Sections 1-4) is identical regardless of where it is written, so the numbered-folder model does not affect the body of the file. The full description of each folder lives in `shared/filesystem-conventions.md`.
 
 ### Components
 
@@ -299,7 +313,7 @@ The slug is ASCII, lowercase, words separated by hyphens. Maximum 40 chars. The 
 
 ### Directory creation
 
-Point's skills create the subfolders lazily as they write (`prompts\` in Phase 3, `handoff\` in Phase 6). POWER's intake skill reads the most recent handoff file across project folders by default, or a specific filename / project slug passed by the learner. See `shared/filesystem-conventions.md` for the full read-priority rules.
+Point's skills create the subfolders lazily as they write (`01-upload-to-notebooklm\` and `02-notebooklm-prompts\` in the NotebookLM phase, `04-package-for-power\` and `presenter-handbook.md` at packaging, Phase 6). POWER's intake skill reads the most recent handoff file under `04-package-for-power\` across project folders by default, or a specific filename / project slug passed by the learner. See `shared/filesystem-conventions.md` for the full read-priority rules.
 
 ### Retention
 
@@ -307,12 +321,12 @@ The plugin does not delete old project folders or handoff files. Cleanup is the 
 
 ---
 
-## 8. Copy-paste path (Claude.ai)
+## 8. Copy-paste path (no-filesystem fallback)
 
-When the learner uses the Claude.ai Projects packaging, there is no filesystem. The flow is:
+The plugin is built for Claude Code / Cowork, where there is a real filesystem and the numbered folder model of Section 7 applies. The paste path below is the fallback for any environment without a filesystem. The flow is:
 
-1. Point finishes elicitation in its own chat and prints the complete handoff Markdown as its final message.
-2. The learner copies from the line `# PointToPower Handoff v1.0` through the last line of the message.
+1. Point finishes the flow and prints the complete handoff Markdown as a chat block.
+2. The learner copies from the line `# PointToPower Handoff v1.0` through the last line of the block.
 3. The learner opens a fresh POWER chat and pastes the body as their first message.
 4. POWER recognizes the paste by the header line and proceeds with intake.
 

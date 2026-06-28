@@ -29,6 +29,21 @@ allowed-tools:
 
 ## Process
 
+> **W-G1 , פרומפט בלבד.** הסקיל פולט פרומפט להדבקה ב-Claude-in-PowerPoint; הוא לעולם לא בונה את קובץ ה-PPTX בעצמו. הכלי החיצוני בונה את הדק.
+
+### Design Quality Gate (W-G3)
+
+הפרומפט הראשי שמוחזר חייב לעמוד בכל הבנדים הבאים *לפני* שהוא מוחזר. אם הוא נכשל בבנד כלשהו, ה-emitter *לא מחזיר אותו*; הוא מחזק את המפרט קודם:
+
+- גופנים נעולים מפורשות (heading + body + fallback chain) מ-R3 Pairing Rules.
+- פלטה עם כל ערכי ה-hex (primary, accent, background, text) verbatim בתוך הפרומפט.
+- spacing rhythm מפורש (base unit plus סקאלה).
+- מיקום-ויזואל לכל שקופית מפורש ולא עמום (לא "tbd", לא "image here"); הפניה לבלוק פרומפט-התמונה המתאים.
+- RTL מפורש כש-language=he/mixed (כיוון, יישור, מספרים/מותג LTR).
+- motion קונקרטי כשהסגנון דורש (למשל "fade-in 300ms", לא "תוסיף אנימציה").
+- בלי תארים מעורפלים ("מודרני"/"מגניב"/"אלגנטי") בלי פירוט נצפה.
+- סגנון אחד נעול (style_record.primary), לא "תשקול X או Y".
+
 1. קרא את כל קבצי ה-R4 ברפרנסים. כל אחד תורם חלק אחר:
    - SA1-ch1-2: setup ושיתוף עם Copilot Pro / Teams. (`../../references/R4-SA1-ch1-2.md`)
    - SA2-ch3: prompt engineering ספציפי ל-PowerPoint (אוצר מילים, אסטרטגיות, מה עובד ומה לא). (`../../references/R4-SA2-ch3.md`)

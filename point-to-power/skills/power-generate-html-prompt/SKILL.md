@@ -29,6 +29,22 @@ allowed-tools:
 
 ## Process
 
+> **W-G1 , פרומפט בלבד.** הסקיל פולט פרומפט להדבקה ב-Claude.ai; הוא לעולם לא בונה את קובץ ה-HTML בעצמו. Claude בונה את הדק מהפרומפט.
+
+### Design Quality Gate (W-G3)
+
+הפרומפט הראשי שמוחזר חייב לעמוד בכל הבנדים הבאים *לפני* שהוא מוחזר. אם הוא נכשל בבנד כלשהו, ה-emitter *לא מחזיר אותו*; הוא מחזק את המפרט קודם:
+
+- גופנים נעולים מפורשות (heading + body + fallback chain) מ-R3 Pairing Rules.
+- פלטה עם כל ערכי ה-hex (primary, accent, background, text) verbatim בתוך הפרומפט.
+- spacing rhythm מפורש (base unit plus סקאלה).
+- מיקום-ויזואל לכל שקופית מפורש ולא עמום (לא "tbd", לא "image here"); הפניה לבלוק פרומפט-התמונה המתאים.
+- RTL מפורש כש-language=he/mixed (כיוון, יישור, מספרים/מותג LTR).
+- motion קונקרטי כשהסגנון דורש (למשל "fade-in 300ms", לא "תוסיף אנימציה").
+- בלי תארים מעורפלים ("מודרני"/"מגניב"/"אלגנטי") בלי פירוט נצפה.
+- סגנון אחד נעול (style_record.primary), לא "תשקול X או Y".
+- *(HTML, W-G3)* הפרומפט חייב להנחות דק *מגניב ועשיר-אפקטים* (transitions, motion, depth) שתואם את מבנה המצגת, לא עמוד שטוח.
+
 1. קרא את `../../references/R3-stage-3-output.md`, מקטע הסגנון שנבחר, כדי לחלץ HTML/CSS implementation cues, אילו CSS techniques הסגנון מצפה (Grid vs Flexbox, custom properties, animations, dark mode handling).
 2. קרא את `../../references/R1-01-typography.md` להבטחת baseline טיפוגרפי נכון ל-HTML (line-height, font-feature-settings, optical sizing).
 3. קרא את `../../references/R1-02-density.md` כדי לוודא slide pacing נכון בדק HTML, לרוב slide יחיד מציג שורה אחת + visual, לא wall of text.

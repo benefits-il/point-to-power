@@ -1,6 +1,6 @@
 ---
 name: point-structure-content-to-slides
-description: Activate in Phase 4 (Co-edit), after the user returned NotebookLM outputs to content/. Co-edit the returned, researched content together with the user into a slide-by-slide outline that complies with R1 content discipline rules. Runs on returned content, not on guesses.
+description: Activate in Phase 4 (Co-edit), after the user returned NotebookLM outputs to 03-returns/. Co-edit the returned, researched content together with the user into a slide-by-slide outline that complies with R1 content discipline rules. Runs on returned content, not on guesses.
 version: 2.0.0
 user-invocable: false
 disable-model-invocation: false
@@ -12,12 +12,12 @@ allowed-tools:
 
 ## Purpose
 
-הסקיל הכבד ביותר ב-Point. מקבל את intake_record יחד עם **התוכן שחזר מ-NotebookLM** (תיקיית `content/`) ומחזיר רשימת שקופיות מסודרת שכבר עומדת בכללי המשמעת של R1, צפיפות, נוקדים, מבנה סיפור, צפיפות notes. זו פעולה של **עריכה משותפת איטרטיבית** עם הלומד, מבוססת על המחקר והתוצרים שחזרו, לא על ניחושים. הסקיל לא ממליץ על NotebookLM, לא בוחר סגנון, ולא מפיק את ההעברה הסופית.
+הסקיל הכבד ביותר ב-Point. מקבל את intake_record יחד עם **התוכן שחזר מ-NotebookLM** (תיקיית `03-returns/`, כולל `_liked.md`) ומחזיר רשימת שקופיות מסודרת שכבר עומדת בכללי המשמעת של R1, צפיפות, נוקדים, מבנה סיפור, צפיפות notes. זו פעולה של **עריכה משותפת איטרטיבית** עם הלומד, מבוססת על המחקר והתוצרים שחזרו, לא על ניחושים. הסקיל לא ממליץ על NotebookLM, לא בוחר סגנון, ולא מפיק את ההעברה הסופית. **לא מתרגם שמות פרטיים או שמות-מותג (G8): Tuesday נשאר Tuesday.**
 
 ## Inputs
 
 - **intake_record** מ-`elicit-content-from-user`. מכיל meta (10 שדות) ו-content_units (רשימה מסודרת).
-- **returned_content** מתיקיית `build/<slug>/content/`, מה שהלומד החזיר מ-NotebookLM (מקורות Deep Research, תמלילי אודיו, מפות מושגים, briefing docs). זה המקור המרכזי לתוכן השקופיות; ה-content_units הגולמיים הם רק נקודת ההתחלה.
+- **returned_content** מתיקיית `build/<slug>/03-returns/`, מה שהלומד החזיר מ-NotebookLM (מקורות Deep Research, briefing docs, infographics, מצגות-דוגמה, video) plus `_liked.md` שמסמן מה הלומד אהב. זה המקור המרכזי לתוכן השקופיות; ה-content_units הגולמיים הם רק נקודת ההתחלה.
 
 ## Outputs
 
@@ -34,7 +34,7 @@ allowed-tools:
 ## Process
 
 1. קרא את ה-intake_record. ודא ש-meta.target, meta.genre, meta.duration_minutes ו-meta.output_type קיימים. אם משהו חסר, החזר שגיאה לסקיל הקודם, אל תמציא.
-1a. **קרא את `build/<slug>/content/` לפני שאתה בונה.** זה המקור המרכזי לתוכן השקופיות, מה שחזר בפועל מ-NotebookLM. שלב אותו עם ה-content_units הגולמיים: מחקר מאמת או מעשיר נקודה, תמליל אודיו מספק ניסוח, מפת מושגים מציעה מבנה. אם `content/` ריק, אל תמציא, החזר לפונקציה הקוראת שצריך להמתין לתוכן (Phase 4 pause) או לבנות מה-intake בלבד עם סימון מפורש שזה לא מבוסס-מחקר. **עבוד איטרטיבית עם הלומד**, הצג טיוטה, קבל הערות, תקן.
+1a. **קרא את `build/<slug>/03-returns/` (כולל `_liked.md`) לפני שאתה בונה.** זה המקור המרכזי לתוכן השקופיות, מה שחזר בפועל מ-NotebookLM. שלב אותו עם ה-content_units הגולמיים: ה-Deep Research מאמת או מעשיר נקודה, מסמכי ה-BRIEF מספקים ניסוח ומבנה, והאינפוגרפיקות/מצגות-הדוגמה מרמזות על הדגשים הוויזואליים שהלומד אהב. אם `03-returns/` ריק, אל תמציא, החזר לפונקציה הקוראת שצריך להמתין לתוכן (Phase 4 pause) או לבנות מה-intake בלבד עם סימון מפורש שזה לא מבוסס-מחקר. **עבוד איטרטיבית עם הלומד**, הצג טיוטה, קבל הערות, תקן.
 2. קרא את `../../references/handoff-contract.md` Section 3 כדי לוודא את המבנה המדויק של שדה Slide שאתה הולך לייצר.
 3. החלט על מספר השקופיות. החישוב הראשוני: לפחות שקופית אחת לכל דקה ב-`genre: pitch` או `briefing`, בערך 1.5 דקות לשקופית ב-`keynote` או `ted`, ו-2 דקות לשקופית ב-`lecture` או `workshop`. שמור גמישות של +/- 20%.
 4. למיפוי content_units -> slides, השתמש במבנה הסיפור שב-`../../references/R1-07-story-structure.md`. בחר מבנה לפי genre: pitch -> Problem -> Solution -> Proof -> Ask; keynote/ted -> Hook -> Tension -> Resolution -> Echo; lecture/workshop -> Map -> Concept -> Demo -> Practice.
@@ -76,6 +76,7 @@ allowed-tools:
 
 - `genre: workshop` ו-`output_type: slidedoc` -> שקופיות צפופות יותר, פחות notes, יותר טקסט מודפס.
 - `language: mixed` -> ייצר תוכן בעברית ושמור מילים אנגליות מקצועיות במקור. אל תתרגם "API" ל"ממשק". כן תרגם מילים כלליות.
+- **שמות פרטיים ושמות-מותג (G8)** -> לעולם לא מתרגמים, בכל ערך language. "Tuesday" נשאר "Tuesday" ולא "יום שלישי"; שמות מוצרים, חברות, ואנשים נשארים כפי שהם. זו טעות שחזרה בדריירן.
 - `audience` רחב מאוד או דליל -> השתמש ב-R1-addon-A כדי לבחור פרופיל אמצע ולסמן ב-`speaker_notes` שהקהל מעורב.
 - content_unit ארוך מאוד (מעל 500 תווים) -> פצל לשתי שקופיות, אל תדחס.
 - אין content_units בכלל -> החזר שגיאה, אל תייצר שקופיות ריקות.

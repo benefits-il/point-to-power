@@ -27,7 +27,7 @@ allowed-tools:
   - שדות חובה: `target` (enum: html | powerpoint | slides | ask), `audience` (טקסט עברי חופשי), `genre` (enum), `duration_minutes` (int 1-240), `output_type` (enum), `speaker_notes` (on | off), `language` (he | en | mixed).
   - שדות אופציונליים: `style_preference` (טקסט חופשי), `generated_at` (ISO 8601), `session_id` (slug אנגלי).
 - **content_units** (ordered list): רשימת יחידות תוכן גולמיות בסדר זמני התחלתי. כל יחידה מכילה `raw_text` (טקסט עברי) ו-`tentative_position` (int).
-- **project_slug** (string, ASCII lowercase, מקפים, עד 40 תווים): שם תיקיית הפרויקט `build/<slug>/`. עדיפות: session_id > label שהלומד נתן > `untitled`. נקבע מוקדם כי כל השלבים הבאים (Phase 3 כותב ל-`prompts/`, Phase 6 ל-`handoff/`) צריכים אותו. ראה `../../shared/filesystem-conventions.md` לכללי ה-slug.
+- **project_slug** (string, ASCII lowercase, מקפים, עד 40 תווים): שם תיקיית הפרויקט `build/<slug>/`. עדיפות: session_id > label שהלומד נתן > `untitled`. נקבע מוקדם כי כל השלבים הבאים (Phase 3 כותב ל-`01-upload-to-notebooklm/` ו-`02-notebooklm-prompts/`, Phase 6 ל-`04-package-for-power/` plus `presenter-handbook.md`) צריכים אותו. ראה `../../shared/filesystem-conventions.md` לכללי ה-slug.
 
 ## Process
 
